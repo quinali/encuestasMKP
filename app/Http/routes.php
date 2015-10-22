@@ -20,6 +20,20 @@ Route::get('llamadas/{sid}',  		['uses' => 'LlamadasController@index']);
 Route::get('rellamar/{sid}/{tid}',  ['uses' => 'LlamadasController@rellamar']);
 
 
+
+//Zona de administracion
+Route::get('admin',  				['uses' => 'Admin\AdminController@index']);
+Route::get('admin/usuarios',		['uses' => 'Admin\UserAdminController@index']);
+
+Route::get ('admin/user/edit/{id}', ['as' => 'user.edit',	'uses' => 'Admin\UserController@index']);
+Route::post('admin/user/edit',		['as' => 'user.edit',	'uses' => 'Admin\UserController@update']);
+
+
+Route::get('survey/{sid}',  			['uses' => 'Admin\SurveyController@index']);
+Route::get('survey/{sid}/operadores',  	['uses' => 'Admin\OperadoresController@index']);
+Route::get('survey/{sid}/settings',  	['uses' => 'Admin\SettingController@index']);
+
+
 // Authentication routes...
 Route::get('auth/login', 'Auth\AuthController@getLogin');
 Route::post('auth/login', ['as' =>'auth/login', 'uses' => 'Auth\AuthController@postLogin']);

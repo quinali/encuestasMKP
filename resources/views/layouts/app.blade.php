@@ -7,8 +7,8 @@
 	<link rel="shortcut icon" href="assets/images/favicon.png"> 
     <title>Callcenter</title>
     {!! Html::style('assets/css/bootstrap.css') !!}
-	{!! Html::style('assets/css/encuestas.css') !!}
 	{!! Html::style('assets/font-awesome/css/font-awesome.min.css') !!}
+	{!! Html::style('assets/css/encuestas.css') !!}
     <!-- Fonts -->
     <link href='//fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->

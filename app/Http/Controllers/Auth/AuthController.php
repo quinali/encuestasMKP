@@ -9,6 +9,8 @@ use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 use Illuminate\Http\Request;
 
+use Log;
+
 class AuthController extends Controller
 {
     /*
@@ -35,7 +37,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest', ['except' => 'getLogout']);
+        //$this->middleware('guest', ['except' => 'getLogout']);
     }
 
     /**
@@ -46,9 +48,11 @@ class AuthController extends Controller
      */
     protected function validator(array $data)
     {
+		Log::debug("Auth::validator()");
+		
         return Validator::make($data, [
-           'name' => 'required|max:255',
-           'email' => 'required|email|max:255|unique:users',
+           'name' => 'required|max:255|unique:usuarios_operadores',
+           'email' => 'required|email|max:255',
            'password' => 'required|confirmed|min:5',
        ]);
     }
@@ -68,23 +72,30 @@ class AuthController extends Controller
         ]);
     }
 	
-	/**
-	* Esto se substituira por validacion de BBDD
-	*
-	*/
-	public function authenticate()
+	
+	 /**
+     * Sobrecarga el metodo por defecto
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+	
+	 public function postRegister(Request $request)
     {
-        if (Auth::attempt(['name' => $name, 'password' => $password])) {
-            // Authentication passed...
-            return redirect()->intended('dashboard');
+        $validator = $this->validator($request->all());
+
+        if ($validator->fails()) {
+            $this->throwValidationException(
+                $request, $validator
+            );
         }
+		
+		$this->create($request->all());
+
+        
+        return redirect('admin/usuarios');
     }
 	
-	
-	public function postRegister()
-    {
-       return view('encuestas');
-    }
 	
 	
 }

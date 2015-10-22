@@ -19,8 +19,6 @@ class EncuestasController extends Controller
 	
 	public function index()
 	{
-		log::debug("--------------------->");
-		
 		$sqlEncuestas ="SELECT srv.sid,srvLang.surveyls_title ".
 			" FROM surveys srv ".
 			" LEFT JOIN surveys_languagesettings srvLang ON srv.sid = srvLang.surveyls_survey_id ".

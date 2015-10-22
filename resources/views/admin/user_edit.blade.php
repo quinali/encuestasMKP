@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app2')
 @section('content')
 
 {!! Html::style('assets/css/dashboard.css') !!}
@@ -11,7 +11,7 @@
 			<a href="../admin"><i class="fa fa-fw fa-dashboard"></i> Encuestas</a>
         </li>
 		<li>
-			<a href="../admin/usuarios"><i class="fa fa-fw fa-user"></i> Usuarios</a>
+			<a href="../../../admin/usuarios"><i class="fa fa-fw fa-user"></i> Usuarios</a>
 		</li>
 	</ul>
 </div>
@@ -22,17 +22,23 @@
         <div class="col-md-6 col-md-offset-3">
             <div class="panel panel-default">
                 <div class="panel-heading">Registro de nuevo usuario</div>
- 
-                <div class="panel-body">
-                    {!! Form::open(['route' => 'auth/register', 'class' => 'form']) !!}
+				
+				
+				<div class="panel-body">
+                   {!! Form::model($user, array('route' => 'user.edit', $user->id))!!} 
 
                         <div class="form-group">
-                            <label>Users name</label>
-                            {!! Form::input('text', 'name', '', ['class'=> 'form-control']) !!}
+                            <label>{!! Form::label('name', 'Name') !!}</label>
+                           {!! Form::text('name') !!}
                         </div>
+						
+						{!! Form::hidden ('id') !!}
+						
+						   
+						
                         <div class="form-group">
-                            <label>Email</label>
-                            {!! Form::email('email', '', ['class'=> 'form-control']) !!}
+                            <label>{!! Form::label('email', 'Email') !!}</label>
+                            {!! Form::email('email') !!}      
                         </div>
                         <div class="form-group">
                             <label>Password</label>
@@ -45,8 +51,11 @@
                         </div>
 
                         <div>
-                            {!! Form::submit('send',['class' => 'btn btn-primary']) !!}
+                           {!! Form::submit('Guardar',['class' => 'btn btn-default']) !!} <a class="btn btn-default" href="../../../admin/usuarios">Cancelar</a>
                         </div>
+						
+						
+						
                     {!! Form::close() !!}
                 </div>
             </div>

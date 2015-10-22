@@ -2,7 +2,10 @@
 .green { color:green !important}
 .orange { color:orange !important}
 
-#cabecera { background-color:#daddc9; }  
+#cabecera1 { background-color:#daddc9; }  
+#cabecera1 { background-color:#000000; }  
 
 
 .textoCabecera {color:#B4CC12 !important}
+
+.navbar-default {	background-color: #daddc9; }

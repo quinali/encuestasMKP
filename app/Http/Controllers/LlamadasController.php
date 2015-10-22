@@ -14,22 +14,25 @@ use Validator;
 
 class LlamadasController extends Controller
 {
+	protected $numResultaPerPag;
+	protected $encuestasRellamada;
 	
    public function __construct()
 	{
 		
 				
-		$this ->middleware('auth');
+		$this->numResultaPerPag = env('NUMRESULTAPERPAG', '20');
+		$this->encuestasRellamada = explode(',', env('ENCUESTAS_RELLAMADA', ''));
+		$this->middleware('auth');
 	}
 	
 	
 	public function index(Request $request,$sid)
 	{
-		$numResultaPerPag = env('NUMRESULTAPERPAG', '20');
-		$encuestasRellamada = explode(',', env('ENCUESTAS_RELLAMADA', ''));
 		
 		$isConfirmacion=FALSE;
-		if(in_array($sid,$encuestasRellamada)){
+		
+		if(in_array($sid,$this->encuestasRellamada)){
 			$isConfirmacion=TRUE;
 		}
 		
@@ -47,7 +50,7 @@ class LlamadasController extends Controller
 
 	
 		$totalLlamadas=$this->getLlamadasTotals($sid, Auth::user()->name );
-		$totalPages = ceil($totalLlamadas->totalAsignadas / $numResultaPerPag);
+		$totalPages = ceil($totalLlamadas->totalAsignadas / $this->numResultaPerPag);
 		
 		$page = $request->input('page');
 		
@@ -74,7 +77,7 @@ class LlamadasController extends Controller
 		
 		
 		Log::info('LlamadasController::index('.$sid.','.Auth::user()->name.',page='.$page.')');
-		$llamadas=$this->getLlamadas($sid, Auth::user()->name, $page , $numResultaPerPag);
+		$llamadas=$this->getLlamadas($sid, Auth::user()->name, $page , $this->numResultaPerPag);
 		
 		$data = array();
 		$data['sid']=$sid;
@@ -121,12 +124,12 @@ class LlamadasController extends Controller
 	}
 	
 	
-	public function getLlamadas( $sid, $nameOperador, $page, $numResultaPerPag)
+	public function getLlamadas( $sid, $nameOperador, $page)
 	{
 
 		$recallField=$this->getRecallConfig($sid);
 		
-		$startCall = ($page - 1) * $numResultaPerPag;
+		$startCall = ($page - 1) * $this->numResultaPerPag;
 		
 		
 		$sqlToken=	"SELECT ".
@@ -143,7 +146,7 @@ class LlamadasController extends Controller
 					" left join survey_".$sid." srv on maxIDTable.maxid = srv.id ".
 					" left join answers anws on (anws.qid=".$recallField['anws_qid']." and srv.`".$sid.$recallField['anws_code']."` = anws.code)".
 					" where tok.attribute_1='".$nameOperador."' order by tok.tid ".
-					" LIMIT ".$startCall.",".$numResultaPerPag;
+					" LIMIT ".$startCall.",".$this->numResultaPerPag;
 		
 		$llamadas = DB::select($sqlToken);	
 		

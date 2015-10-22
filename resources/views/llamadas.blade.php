@@ -1,4 +1,4 @@
-@extends('app')
+@extends('layouts.app')
 @section('content')
 {!! Html::style('assets/css/dashboard.css') !!}
 {!! Html::style('assets/css/sb-admin.css') !!} 

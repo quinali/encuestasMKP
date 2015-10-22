@@ -17,22 +17,34 @@
     	<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
      	<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+
+ 	<!-- Scripts -->
+	{!! Html::script('assets/js/jquery.js') !!}
+    {!! Html::script('assets/js/bootstrap.min.js') !!}
+
+    <!-- Morris Charts CSS -->
+	{!! Html::style('assets/css/plugins/morris.css') !!}
+	{!! Html::script('assets/js/plugins/morris/raphael.min.js') !!}
+	{!! Html::script('assets/js/plugins/morris/morris.js') !!}
+	{!! Html::script('assets/js/plugins/morris/morris-data.js') !!}
+</body>
+
 </head>
 <body>
 	<!-- Static navbar -->
-    <nav id="cabecera" class="navbar navbar-default navbar-static-top">
-        <div  class="container">
-		    <div class="navbar-header">
-				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-					<span class="sr-only">Toggle navigation</span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</button>
-				<a class="navbar-brand" href="{{ URL::to('encuestas')}}">MKpersons</a>
-		    </div>
-		    <div class="collapse navbar-collapse" >
-		        <ul class="nav navbar-nav navbar-right">
+    <!-- Navigation -->
+        <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="{{ URL::to('admin')}}">{!! HTML::image('assets/images/mkpersons-logo1.png', 'logo', array( 'height' => 35, 'margin-top' => -13)) !!}</a>
+            <!-- Top Menu Items -->
+            <ul class="nav navbar-nav navbar-right">
 				    @if (Auth::guest())
 				        <li><a href="{{route('auth/login')}}">Login</a></li>
 						<li><a href="{{route('auth/register')}}">Register</a></li>
@@ -40,10 +52,20 @@
 		                <li><a href="#">Operador: {{ Auth::user()->name }}</a></li>
 		                <li><a href="{{route('auth/logout')}}">Logout</a></li>
 		            @endif
-				</ul>
-			</div>
-		</div>
-	</nav>
+			</ul>
+            <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav side-nav">
+                    <li class="active">
+                        <a href="#"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
+                    </li>
+                    <li>
+                        <a href="usuarios"><i class="fa fa-fw fa-user"></i> Usuarios</a>
+                    </li>
+			    </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </nav>
 	
 	
     <div class="container">
@@ -72,8 +94,5 @@
 	@yield('content')
 	
 	</div>
-    <!-- Scripts -->
-	{!! Html::script('assets/js/jquery.js') !!}
-    {!! Html::script('assets/js/bootstrap.min.js') !!}
-</body>
+   
 </html>
