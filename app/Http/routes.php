@@ -22,7 +22,7 @@ Route::get('rellamar/{sid}/{tid}',  ['uses' => 'LlamadasController@rellamar']);
 
 
 //Zona de administracion
-Route::get('admin',  				['uses' => 'Admin\AdminController@index']);
+Route::get('admin/',  				['uses' => 'Admin\AdminController@index']);
 Route::get('admin/usuarios',		['uses' => 'Admin\UserAdminController@index']);
 
 Route::get ('admin/user/edit/{id}', ['as' => 'user.edit',	'uses' => 'Admin\UserController@index']);
@@ -31,6 +31,7 @@ Route::post('admin/user/edit',		['as' => 'user.edit',	'uses' => 'Admin\UserContr
 
 Route::get('survey/{sid}',  			['uses' => 'Admin\SurveyController@index']);
 Route::get('survey/{sid}/operadores',  	['uses' => 'Admin\OperadoresController@index']);
+Route::post('survey/{sid}/operadores',  ['as' => 'admin\operadores','uses' => 'Admin\OperadoresController@save']);
 Route::get('survey/{sid}/settings',  	['uses' => 'Admin\SettingController@index']);
 
 

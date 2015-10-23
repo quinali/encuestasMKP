@@ -1,4 +1,4 @@
-@extends('layouts.app2')
+@extends('layouts.app3')
 @section('content')
 {!! Html::style('assets/css/dashboard.css') !!}
 {!! Html::style('assets/css/sb-admin.css') !!} 
@@ -73,10 +73,8 @@
                                                                         <select multiple id='lstBox1' size="10">
                                                                            
                                                                            //Propuesta de operadores
-                                                                            @foreach ($data['operadores'] as $operador)
-                                                                                                                                                                        
+                                                                            @foreach ($data['opPosibles'] as $operador)
                                                                                <option value='{{$operador->id}}'>{{$operador->name}}</option>
-                                                                            
                                                                             @endforeach
                 
                                                                         </select>
@@ -84,9 +82,49 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+
+
+                                                        <!-- BOTONERA DE ASIGNACION -->
+                                                         <div class="col-lg-3 col-md-6 text-center" style="vertical-align:middle;">
+                                                            <div class="panel panel-default clear">
+                                                                <div class="panel-body">
+                                                                    <br/><br/><br/><br/>
+                                                                    <input type='button' id='btnLeft' value ='  <  ' onclick="lanzaEvento();"/>
+                                                                    <input type='button' id='btnRight' value ='  >  '/>
+                                                                   <br/><br/>
+                                                                </div>
+                                                            </div>
+                                                        </div>   
+
+                                                        <!-- MULTISELECT OPERADORES ASIGNADOS -->
+                                                        <div class="col-lg-3 col-md-6 text-center">
+                                                            <div class="panel panel-default clear">
+                                                                <div class="panel-body">
+                                                                    <b>Asignados: </b><br/>
+                                                                    <select multiple id='lstBox2' name="lstBox2[]" size="10">
+                                                                        @foreach ($data['opAsignados'] as $operador)
+                                                                               <option value='{{$operador->id}}'>{{$operador->name}}</option>
+                                                                        @endforeach                                                        
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
                                                     </div>
                                                     <!-- /.row -->
-                                </divv>
+                                                </div>
+                                                
+                                                <div class="panel-footer text-right">
+                                                    {!! Form::open(array('route' => array('admin\operadores', $data['sid']))) !!}
+                                                    
+                                                    
+                                                        <input type="hidden"    name="surveyID" value="{{$data['sid']}}"  >
+                                                        <input type="hidden"    id="operadoresID" name="operadoresID" value="{{$data['opIdAsignados']}}" >
+                                                        
+                                                        <input type="submit" class="btn btn-info" value="Guardar">
+                                                    {!! Form::close() !!}
+                                </div>
+
                         </div>
                     </div>
                     <!-- /.row -->

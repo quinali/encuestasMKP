@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use DB;
 use Log;
 use Auth;
+use Redirect;
 
 class OperadoresController extends Controller
 {
@@ -25,23 +26,64 @@ class OperadoresController extends Controller
 					->where('surveyls_survey_id',$sid)
 					->first();
 
-		$operadores = DB::table('usuarios_operadores')
-					->get();
-		
+		$opIdAsignados = DB::table('survey_operators')
+					->where('idSurvey',$sid)
+					->lists('idOperator');
 
 		$opAsignados = DB::table('survey_operators')
+					->join('usuarios_operadores', 'survey_operators.idOperator', '=', 'usuarios_operadores.id')
 					->where('idSurvey',$sid)
+					->orderBy('order','asc')
+					->get();			
+
+		$opPosibles = DB::table('usuarios_operadores')
+					->whereNotIn('id',$opIdAsignados)
+					->orderBy('order','asc')
 					->get();
-		
+
 		$data = array();
 
 		$data['sid']=$sid;
 		$data['survey_title']=$surveys_languagesettings->surveyls_title;
-		$data['operadores']=$operadores;
+		$data['opPosibles']=$opPosibles;
 		$data['opAsignados']=$opAsignados;
+		$data['opAsignados']=$opAsignados;
+		$data['opIdAsignados']=json_encode($opIdAsignados);
 		
 		return view('admin\operadores' , ['data' => $data]);	
 		
 	}
 	
+	public function save(Request $request,$sid)
+	{
+
+		
+
+		$idOperadores=json_decode($request->input('operadoresID'));
+
+		var_dump($idOperadores);
+
+
+		//$idOperadores=[1,5,7,8,9,10];		
+
+		//Borramos todos
+		DB::table('survey_operators')->where('idSurvey',$sid)->delete();
+
+		$opAsignados = DB::table('usuarios_operadores')
+					->whereIn('id',$idOperadores)
+					->orderBy('order','asc')
+					->get();
+		
+		foreach ($opAsignados  as $operador ) {
+			
+			DB::table('survey_operators')->insert([
+				'idSurvey'=>$sid,
+				'idOperator'=>$operador->id
+				]);
+		}
+
+		return Redirect::to('survey/'.$sid.'/operadores')->with('status', '¡Operadores asignados guardados correctamente!');
+
+	}
+
 }

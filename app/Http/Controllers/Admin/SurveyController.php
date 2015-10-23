@@ -51,8 +51,7 @@ class SurveyController extends Controller
 					->whereNotNull('attribute_1')
 					->groupBy('attribute_1')
 					->select('attribute_1')
-					->get();	
-
+					->lists('attribute_1');
 		
 		$sqlOperadores ="SELECT CONVERT(SUBSTRING(operador,4),UNSIGNED INTEGER)+ (IF(STRCMP(SUBSTRING(operador,1,3),'sev'),1,100))as orden,".
 						"operador, ".

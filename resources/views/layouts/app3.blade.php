@@ -27,7 +27,7 @@
 	{!! Html::script('assets/js/plugins/morris/raphael.min.js') !!}
 	{!! Html::script('assets/js/plugins/morris/morris.js') !!}
 	{!! Html::script('assets/js/plugins/morris/morris-data.js') !!}
-</body>
+
 
 </head>
 <body>
@@ -44,27 +44,17 @@
                 </button>
                 <a class="navbar-brand" href="{{ URL::to('admin')}}">{!! HTML::image('assets/images/mkpersons-logo1.png', 'logo', array( 'height' => 35, 'margin-top' => -13)) !!}</a>
             <!-- Top Menu Items -->
-            <ul class="nav navbar-nav navbar-right">
-				    @if (Auth::guest())
-				        <li><a href="{{route('auth/login')}}">Login</a></li>
-						<li><a href="{{route('auth/register')}}">Register</a></li>
-				    @else
-		                <li><a href="#">Operador: {{ Auth::user()->name }}</a></li>
-		                <li><a href="{{route('auth/logout')}}">Logout</a></li>
-		            @endif
-			</ul>
-            <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
-            <div class="collapse navbar-collapse navbar-ex1-collapse">
-                <ul class="nav navbar-nav side-nav">
-                    <li class="active">
-                        <a href="#"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
-                    </li>
-                    <li>
-                        <a href="usuarios"><i class="fa fa-fw fa-user"></i> Usuarios</a>
-                    </li>
-			    </ul>
-            </div>
-            <!-- /.navbar-collapse -->
+            
+	            <ul class="nav navbar-nav navbar-right">
+					    @if (Auth::guest())
+					        <li><a href="{{route('auth/login')}}">Login</a></li>
+							<li><a href="{{route('auth/register')}}">Register</a></li>
+					    @else
+			                <li><a href="#">Usuario: {{ Auth::user()->name }}</a></li>
+			                <li><a href="{{route('auth/logout')}}">Logout</a></li>
+			            @endif
+				</ul>
+          
         </nav>
 	
 	
@@ -94,5 +84,10 @@
 	@yield('content')
 	
 	</div>
-   
+
+</body>
+
+@include('scriptsFooter')
+
+
 </html>

@@ -32,3 +32,7 @@ update tokens_581766	tok left join usuarios_operadores usuOp on tok.attribute_1 
 update tokens_759124	tok left join usuarios_operadores usuOp on tok.attribute_1 = usuOp.name set tok.attribute_1=usuOp.id;
 update tokens_835791	tok left join usuarios_operadores usuOp on tok.attribute_1 = usuOp.name	set tok.attribute_1=usuOp.id;
 update tokens_996661	tok left join usuarios_operadores usuOp on tok.attribute_1 = usuOp.name set tok.attribute_1=usuOp.id;
+
+
+
+	ALTER TABLE bbddmkp.survey_operators DROP COLUMN nameOperator;
