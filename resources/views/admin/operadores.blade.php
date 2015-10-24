@@ -18,7 +18,7 @@
 			<a href="#"><i class="fa fa-fw fa-group"></i> Operadores</a>
 		</li>
 		<li>
-			<a href="#"><i class="fa fa-fw fa-edit"></i> Configuración</a>
+			<a href="settings"><i class="fa fa-fw fa-edit"></i> Configuración</a>
 		</li>
 	</ul>
 </div>

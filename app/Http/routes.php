@@ -32,7 +32,7 @@ Route::post('admin/user/edit',		['as' => 'user.edit',	'uses' => 'Admin\UserContr
 Route::get('survey/{sid}',  			['uses' => 'Admin\SurveyController@index']);
 Route::get('survey/{sid}/operadores',  	['uses' => 'Admin\OperadoresController@index']);
 Route::post('survey/{sid}/operadores',  ['as' => 'admin\operadores','uses' => 'Admin\OperadoresController@save']);
-Route::get('survey/{sid}/settings',  	['uses' => 'Admin\SettingController@index']);
+Route::get('survey/{sid}/settings',  	['uses' => 'Admin\SettingsController@index']);
 
 
 // Authentication routes...
