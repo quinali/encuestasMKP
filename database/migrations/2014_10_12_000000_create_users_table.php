@@ -18,6 +18,7 @@ class CreateUsersTable extends Migration
             $table->string('email');
             $table->string('password', 60);
 			$table->integer('order');
+			$table->boolean('isAdmin');
             $table->rememberToken();
             $table->timestamps();
         });

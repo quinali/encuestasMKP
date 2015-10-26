@@ -5,10 +5,11 @@
 {!! Html::style('assets/css/sb-admin.css') !!} 
 {!! Html::style('assets/css/llamadas.css') !!}
 
+
 <div class="collapse navbar-collapse navbar-ex1-collapse">
     <ul class="nav navbar-nav side-nav">
 		<li>
-			<a href="../admin"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
+			<a href="../../survey/{{$data['sid']}}"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
         </li>
 		<li>
 			<a href="operadores"><i class="fa fa-fw fa-group"></i> Operadores</a>
@@ -29,62 +30,113 @@
 				
 				<div class="panel-body">
 
-                        <div class="form-group">
-						    {!! Form::open(array('url' => 'settings/url')) !!} 
-                            
+		                <div class="form-group">
+							{!! Form::open(['route' => ['url.update', $data["sid"]] , 'method' => 'post']) !!} 
+
 							<label>{!! Form::label('urlLanguage', 'URL language') !!}</label>
                         
 						<div class="row">
-							{!! Form::text('url',$data['surveyls_url']) !!}
-						
-							<a href="javascript:getUrl();" class="btn btn-info"><span data-toggle='tooltip' data-placement='top' title='Recalcular'><i class="fa fa-refresh"></i></span></a>
-							<a href="javascript: document.urlForm.submit();" class="btn btn-info"><span data-toggle='tooltip' data-placement='top' title='Guardar'><i class="fa fa-floppy-o"></i></span></a>
+							{!! Form::text('url',$data['surveyls_url'],['id'=>'url']) !!}
+							{!! Form::hidden('sid',$data['sid']) !!}
+
+							<a href="javascript:getUrl();" class="btn btn-info"><span data-toggle='tooltip' data-placement='top' title='Recalcular URL'><i class="fa fa-refresh"></i></span></a>
+							<button type="submit" class="btn btn-info"><span data-toggle='tooltip' data-placement='top' title='Guardar'><i class="fa fa-floppy-o"></i></span></button>
 							
-							{!! Form::submit('Guardar',['class' => 'btn btn-default']) !!} 
+							
 						</div>
 						{!! Form::close() !!}	
                         </div>
 						
 						<div class="form-group">
-						    {!! Form::open(array('url' => 'settings/url')) !!} 
-                            
+							{!! Form::open(['route' => ['url.updateTitle', $data["sid"]] , 'method' => 'post']) !!} 
+						    
 							<label>{!! Form::label('urlTitle', 'URL title') !!}</label>
 							
 							<div class="row">
-								{!! Form::text('title',$data['surveyls_urldescription']) !!}
-								<a href="javascript:getUrl();" class="btn btn-info"><span data-toggle='tooltip' data-placement='top' title='Recalcular'><i class="fa fa-refresh"></i></span></a>
-								<a href="javascript: document.urlForm.submit();" class="btn btn-info"><span data-toggle='tooltip' data-placement='top' title='Guardar'><i class="fa fa-floppy-o"></i></span></a>
-								{!! Form::submit('Guardar',['class' => 'btn btn-default']) !!} 
+								{!! Form::text('title',$data['surveyls_urldescription'],['id'=>'title']) !!}
+								
+								{!! Form::hidden('sid',$data['sid']) !!}
+
+								<a href="javascript:getUrlTitle();" class="btn btn-info"><span data-toggle='tooltip' data-placement='top' title='Recalcular'><i class="fa fa-refresh"></i></span></a>
+								<button type="submit" class="btn btn-info"><span data-toggle='tooltip' data-placement='top' title='Guardar'><i class="fa fa-floppy-o"></i></span></button>
+								
 							</div>
 						
 						{!! Form::close() !!}	
                         </div>
 						
 						<div class="form-group">
-						    {!! Form::open(array('url' => 'settings/url')) !!} 
+						    {!! Form::open(['route' => ['url.updateSetting', $data["sid"]] , 'method' => 'post']) !!} 
                             
 							<label>{!! Form::label('plugginSettings', 'Pluggins settings') !!}</label>
                         
 						<div class="row">
-							{!! Form::text('plugSettings',$data['pluggins_settings']) !!}
+							{!! Form::text('plugginSettings',$data['pluggins_settings'],['id'=>'plugginSettings']) !!}
 						
-							<a href="javascript:getUrl();" class="btn btn-info"><span data-toggle='tooltip' data-placement='top' title='Recalcular'><i class="fa fa-refresh"></i></span></a>
-							<a href="javascript: document.urlForm.submit();" class="btn btn-info"><span data-toggle='tooltip' data-placement='top' title='Guardar'><i class="fa fa-floppy-o"></i></span></a>
+							<a href="javascript:getPluginSetting();" class="btn btn-info"><span data-toggle='tooltip' data-placement='top' title='Recalcular'><i class="fa fa-refresh"></i></span></a>
+							<button type="submit" class="btn btn-info"><span data-toggle='tooltip' data-placement='top' title='Guardar'><i class="fa fa-floppy-o"></i></span></button>
 							
-							{!! Form::submit('Guardar',['class' => 'btn btn-default']) !!} 
+							
 						</div>
 						{!! Form::close() !!}	
+
                         </div>
 												
-						
-
-						
-						
-						
                     {!! Form::close() !!}
                 </div>
             </div>
         </div>
     </div>
 </div>
+@endsection
+
+
+@section('scripts')
+<script>
+
+
+function getUrl(){
+
+		$.ajax({
+                url:   'settings/url',
+                type:  'get',
+                success:  function (data) {
+                      $("#url").val(data);
+                }
+        });
+}
+
+
+function getUrlTitle(){
+
+		$.ajax({
+                url:   'settings/urlTitle',
+                type:  'get',
+                beforeSend: function () {
+                        $("#resultado").html("Procesando, espere por favor...");
+                },
+                success:  function (data) {
+  
+                    $("#title").val(data);
+                }
+        });
+}
+
+
+function getPluginSetting(){
+
+		$.ajax({
+                url:   'settings/pluginSetting',
+                type:  'get',
+                beforeSend: function () {
+                        $("#resultado").html("Procesando, espere por favor...");
+                },
+                success:  function (data) {
+  
+                    $("#plugginSettings").val(data);
+                }
+        });
+}
+
+</script>
 @endsection

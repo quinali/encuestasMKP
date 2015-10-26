@@ -14,7 +14,7 @@ class OperadoresController extends Controller
 {
    public function __construct()
 	{
-		//$this ->middleware('auth');
+		$this ->middleware('auth');
 	}
 	
 	
@@ -36,8 +36,21 @@ class OperadoresController extends Controller
 					->orderBy('order','asc')
 					->get();			
 
+
+		$usuarios_administradores= DB::table('usuarios_operadores')
+					->where('isAdmin',TRUE)
+					->get();			
+
+	
+
+		$arrayUsersAdmin = array();
+		foreach ($usuarios_administradores as $usuario_admin) {
+					array_push ($arrayUsersAdmin,$usuario_admin->id);
+		}
+
 		$opPosibles = DB::table('usuarios_operadores')
 					->whereNotIn('id',$opIdAsignados)
+					->whereNotIn('id',$arrayUsersAdmin)
 					->orderBy('order','asc')
 					->get();
 
@@ -62,9 +75,6 @@ class OperadoresController extends Controller
 		$idOperadores=json_decode($request->input('operadoresID'));
 
 		var_dump($idOperadores);
-
-
-		//$idOperadores=[1,5,7,8,9,10];		
 
 		//Borramos todos
 		DB::table('survey_operators')->where('idSurvey',$sid)->delete();
