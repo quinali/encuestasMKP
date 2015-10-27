@@ -14,9 +14,12 @@
 		<li>
 			<a href="operadores"><i class="fa fa-fw fa-group"></i> Operadores</a>
 		</li>
-		<li>
+		<li class="active" >
 			<a href="#"><i class="fa fa-fw fa-edit"></i> Configuración</a>
 		</li>
+        <li>
+            <a href="dispatch"><i class="fa fa-fw fa-refresh"></i> Asignación</a>
+        </li>
 	</ul>
 </div>
 <!-- /.navbar-collapse -->
@@ -65,7 +68,7 @@
 						{!! Form::close() !!}	
                         </div>
 						
-						<div class="form-group">
+						<div class="form-group hidden" >
 						    {!! Form::open(['route' => ['url.updateSetting', $data["sid"]] , 'method' => 'post']) !!} 
                             
 							<label>{!! Form::label('plugginSettings', 'Pluggins settings') !!}</label>

@@ -1,35 +1,30 @@
 @extends('layouts.app2')
 @section('content')
-{!! Html::style('assets/css/dashboard.css') !!}
-{!! Html::style('assets/css/sb-admin.css') !!} 
-{!! Html::style('assets/css/llamadas.css') !!}
-   <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
+
+ <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav side-nav">
                     <li class="active">
                         <a href="#"><i class="fa fa-fw fa-dashboard"></i> Encuestas</a>
                     </li>
-					<li>
+                    <li>
                         <a href="admin/usuarios"><i class="fa fa-fw fa-user"></i> Usuarios</a>
                     </li>
                 </ul>
             </div>
-            <!-- /.navbar-collapse -->
+        </nav>
 
-<div class="container-fluid">
-	<div class="row">
-		<div class="col-md-12">
-			<div class="panel panel-default">
-				
-				<!-- Page Heading -->
-                <div class="row">
-                    <div class="col-lg-12 col-md-offset-1">
+    <!-- /.navbar-collapse -->
+  	<div id="page-wrapper">
+		
+		<div class="container-fluid">
+		
+			<!-- Page Heading -->
+			<div class="row">
+                    <div class="col-lg-12">
                         <h1 class="page-header">
                             Administración encuestas activas:
                         </h1>
-                    </div>
-
-					<div class="panel-heading col-md-offset-1">
                     	<ol class="breadcrumb">
 		                	<li class="active">
 		                    	<i class="fa fa-dashboard"></i> Encuestas
@@ -46,15 +41,28 @@
 
                 <!-- Zona del mensaje -->
 
+               <div class="row">
+                    <div class="col-lg-12">
+                        <div class="alert alert-info alert-dismissable">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                            <i class="fa fa-info-circle"></i>  <strong>Like SB Admin?</strong> Try out <a href="http://startbootstrap.com/template-overviews/sb-admin-2" class="alert-link">SB Admin 2</a> for additional features!
+                        </div>
+                    </div>
+                </div>
                 <!-- /.row -->
+
+
+
 					
-					<div class="row">
+				<div class="row">
                     	<div class="col-lg-12">
-                            <div class="panel-body">
-									<div class="row">
-										<div class="col-lg-12 text-center">
-											<div class="panel panel-default">
-												<div class="panel-body">
+                    		<div class="panel panel-default">
+	                            <div class="panel-heading">
+	                                <h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Encuestas</h3>
+	                            </div>
+                          		<div class="panel-body">
+									
+									
 													<div class="table-responsive">
 														<table id="encuestas" class="kkk table table-bordered table-hover">
 															<thead>
@@ -93,19 +101,16 @@
 														</div>
 													</div>				
 												</div>	
-											</div>
-										</div>		
-									</div>
+											
+									</div>		
+									
 								</div>
 							</div>
+							<!-- ./row -->
 						</div>
-					</div>						
+           				 <!-- /.container-fluid -->
+		 </div>
+        <!-- /#page-wrapper -->				
 
-					<!-- /.row -->
-					
-					
-			</div>		
-		</div>
-	</div>
-</div>
+	
 @endsection

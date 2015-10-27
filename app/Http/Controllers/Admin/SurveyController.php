@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Admin\SettingsController;
 use DB;
 use Log;
 use Auth;
@@ -28,61 +29,86 @@ class SurveyController extends Controller
 					->first();
 
 
-		$llamadasPdtes = DB::table('tokens_'.$sid)
+		$llamadasPdtesNoRealizadas = DB::table('tokens_'.$sid)
 					->where('completed','N')
+					->where('usesleft','1')
 					->count();
 					
-		$llamadasEmitidas = DB::table('tokens_'.$sid)
-					->where('completed','<>','N')
-					->count();
 		
-		$llamadasTotales = DB::table('tokens_'.$sid)
+		$llamadasPdtesRecuperadas = DB::table('tokens_'.$sid)
 					->where('completed','N')
+					->where('usesleft','<>','1')
 					->count();
-
-
-
-		$OpTotal = DB::table('survey_operators')
-					->where('idSurvey',$sid)
-					->count();			
-
-		//DB::enableQueryLog();			
 		
-		$OpConLlamada=DB::table('tokens_'.$sid)
-					->whereNotNull('attribute_1')
-					->groupBy('attribute_1')
-					->select('attribute_1')
-					->lists('attribute_1');
-		
-		$sqlOperadores ="SELECT CONVERT(SUBSTRING(operador,4),UNSIGNED INTEGER)+ (IF(STRCMP(SUBSTRING(operador,1,3),'sev'),1,100))as orden,".
-						"operador, ".
-						"(select count(1) from tokens_".$sid." tk2 where tk2.attribute_1=tok1.operador and completed='N') as ptes, ".
-						"(select count(1) from tokens_".$sid." tk3 where tk3.attribute_1=tok1.operador and completed<>'N') as ejecutadas ".
-						"FROM ".
-						"(select distinct(attribute_1) as operador from tokens_".$sid."  group by attribute_1) as tok1 order by orden";
+		$rellamadaColumn = $sid.'X'.SettingsController::getAnwswerGroup($sid).'X'.SettingsController::getRellamadaAnswer($sid);			
+
+		$sqlLlamadasEmitidasRecuperables="select count(1) as num from tokens_".$sid." where token in".
+						" ( ".
+  						"	select maxTable.token ".
+  						"	from ( select token,max(id) as maxid from survey_".$sid." group by token) as maxTable ".
+  						"	inner join survey_".$sid." as sv on maxTable.token=sv.token and maxTable.maxId = sv.id ".
+  						"	where `".$rellamadaColumn."`='A1' ".
+						" ) and tokens_".$sid.".completed<>'N'";
+			
+		$llamadasEmitidasRecuperables = DB::select($sqlLlamadasEmitidasRecuperables);						
+
+		$sqlLlamadasEmitidasNoRecuperables="select count(1) as num from tokens_".$sid." where token in".
+						" ( ".
+  						"	select maxTable.token ".
+  						"	from ( select token,max(id) as maxid from survey_".$sid." group by token) as maxTable ".
+  						"	inner join survey_".$sid." as sv on maxTable.token=sv.token and maxTable.maxId = sv.id ".
+  						"	where `".$rellamadaColumn."`='A2' ".
+						" ) and tokens_".$sid.".completed<>'N'";
+
+		$llamadasEmitidasNORecuperables = DB::select($sqlLlamadasEmitidasNoRecuperables);
+
+
+
+		$sqlOperadores ="	SELECT uOp.name as name, ".
+						"	(select count(1) from tokens_".$sid." tk2 where tk2.attribute_1=tok1.operador and completed='N' and usesleft=1) as ptesNuncaRealizadas, ".
+						"	(select count(1) from tokens_".$sid." tk2 where tk2.attribute_1=tok1.operador and completed='N' and usesleft<>1) as ptesRecuperadas, ".
+						"	( ".
+						"	  select count(1) from tokens_".$sid." where tokens_".$sid.".token in ".
+						"	(select maxTable.token ".
+						"	from ( select token,max(id) as maxid from survey_".$sid." group by token) as maxTable ".
+						"	inner join survey_".$sid." as sv on maxTable.token=sv.token and maxTable.maxId = sv.id ".
+						"	where `".$rellamadaColumn."`='A1' ".
+						"	) and tokens_".$sid.".completed<>'N' ".
+						"	  and tokens_".$sid.".attribute_1=tok1.operador	".
+						"	)as ejecutadasRecuperables, ".
+						"	( ".
+						"	  select count(1) from tokens_".$sid." where tokens_".$sid.".token in ".
+						"	(select maxTable.token ".
+						"	from ( select token,max(id) as maxid from survey_".$sid." group by token) as maxTable ".
+						"	inner join survey_".$sid." as sv on maxTable.token=sv.token and maxTable.maxId = sv.id ".
+						"	where `".$rellamadaColumn."`='A2' ".
+						"	) and tokens_".$sid.".completed<>'N' ".
+						"	  and tokens_".$sid.".attribute_1=tok1.operador	".
+						"	)as ejecutadasNORecuperables ".
+						"	FROM  ".
+						"	(select distinct(attribute_1) as operador from tokens_".$sid." where attribute_1 is not null group by attribute_1) as tok1  ".
+						"	left join usuarios_operadores uOp on tok1.operador=uOp.id ".
+						"	order by uOp.`order` ";
+
 
 		$llamadasPorOperadores = DB::select($sqlOperadores);					
 		
 
 
-
 		$data = array();
 		$data['survey_title']=$surveys_languagesettings->surveyls_title;
 		$data['sid']=$sid;
-		$data['LlamPdtes']=$llamadasPdtes;
-		$data['LlamHechas']=$llamadasEmitidas;			
-		$data['LlamTotal']=$llamadasTotales;	
+		$data['LlamPdtesNoRealizadas']=$llamadasPdtesNoRealizadas;
+		$data['LlamPdtesRecuperadas']=$llamadasPdtesRecuperadas;
 
-		$data['OpConLlamada']=sizeof($OpConLlamada);			
-		$data['OpTotal']=$OpTotal;	
+		$data['LlamEmitidasRecuperables']=$llamadasEmitidasRecuperables[0]->num;			
+		$data['LlamEmitidasNoRecuperables']=$llamadasEmitidasNORecuperables[0]->num;	
 
 		$data['llamadasPorOperadores']=$llamadasPorOperadores;
-
-
-
 		
 		return view('admin\survey' , ['data' => $data]);	
 		
 	}
-	
+
+
 }

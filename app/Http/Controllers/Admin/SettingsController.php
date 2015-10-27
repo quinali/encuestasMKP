@@ -68,33 +68,11 @@ class SettingsController extends Controller
 	public function calculatePlugginSetting($sid){
 
 
-		DB::connection()->enableQueryLog();
+		$gid=$this->getAnwswerGroup($sid);
 
-		$gid=DB::table('groups')
-			->select('gid')
-			->where('sid',$sid)
-			->where('group_name','G1')
-			->first()
-			->gid;
-
-
-
-		$sqlQid1="select qid from questions q where sid=:sid and title='G1P1' and locate('¿Ha contactado con el cliente?',question)<>0";
-		$qid1 = DB::select( DB::raw($sqlQid1), array('sid' => $sid))[0]->qid;
-
-
-		$sqlQid2=" select qid from questions q where sid=:sid and title='G1P2' ".
-				  " and (locate('En caso de no haber contactado con el cliente indique la causa',question)<>0 OR locate('En caso de no haber contactado indique la causa',question)<>0)";
-
-		$qid2 = DB::select( DB::raw($sqlQid2), array('sid' => $sid))[0]->qid;
-	
-
-		$sqlQid3= " select qid from questions q where sid=:sid".
-				  " and title='G1P3' ".
-				  " and (locate('Indique la causa por la que hay que volver a llamar al cliente',question)<>0 ".
-				  "		OR locate('Indique la causa por la que sea necesario volver a llamar al cliente.',question)<>0)";
-				
-		$qid3 = DB::select( DB::raw($sqlQid3), array('sid' => $sid))[0]->qid;
+		$qid1 = $this->getHaConstactadoAnswer($sid);
+		$qid2 = $this->getRellamadaAnswer($sid);
+		$qid3 = $this->getMotivoRellamarAnswer($sid);
 
 		$plugin_settings=$qid3.",X".$gid."X".$qid1.",X".$gid."X".$qid2.",X".$gid."X".$qid3;
 
@@ -143,6 +121,55 @@ class SettingsController extends Controller
 				->update(['value'=>$request->input('plugginSettings')]);
 
 			return $this->index($sid);
+	}
+
+
+	public static function getAnwswerGroup($sid){
+
+		return 	$gid=DB::table('groups')
+			->select('gid')
+			->where('sid',$sid)
+			->where('group_name','G1')
+			->first()
+			->gid;
+
+
+	}
+
+
+	public static function getHaConstactadoAnswer($sid){
+
+		$sqlQid1="select qid from questions q where sid=:sid and title='G1P1' and locate('¿Ha contactado con el cliente?',question)<>0";
+		
+		$qid1 = DB::select( DB::raw($sqlQid1), array('sid' => $sid))[0]->qid;
+
+		return $qid1;
+
+	}
+
+	public static function getRellamadaAnswer($sid){
+
+		$sqlQid2=" select qid from questions q where sid=:sid and title='G1P2' ".
+				  " and (locate('En caso de no haber contactado con el cliente indique la causa',question)<>0 OR locate('En caso de no haber contactado indique la causa',question)<>0)";
+
+		$qid2 = DB::select( DB::raw($sqlQid2), array('sid' => $sid))[0]->qid;
+
+		return $qid2;
+
+	}
+
+
+	public static function getMotivoRellamarAnswer($sid){
+
+		$sqlQid3= " select qid from questions q where sid=:sid".
+				  " and title='G1P3' ".
+				  " and (locate('Indique la causa por la que hay que volver a llamar al cliente',question)<>0 ".
+				  "		OR locate('Indique la causa por la que sea necesario volver a llamar al cliente.',question)<>0)";
+				
+		$qid3 = DB::select( DB::raw($sqlQid3), array('sid' => $sid))[0]->qid;
+
+		return $qid3;
+
 	}
 
 }

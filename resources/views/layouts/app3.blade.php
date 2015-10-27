@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="shortcut icon" href="assets/images/favicon.png"> 
     <title>Callcenter</title>
-    {!! Html::style('assets/css/bootstrap.css') !!}
+    {!! Html::style('assets/css/bootstrap.min.css') !!}
 	{!! Html::style('assets/css/encuestas.css') !!}
 	{!! Html::style('assets/font-awesome/css/font-awesome.min.css') !!}
     <!-- Fonts -->

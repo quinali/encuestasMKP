@@ -38,7 +38,7 @@ class EncuestasController extends Controller
 			$encuestaTotales = DB::select('select '.
 				' ( select count(1) from tokens_'.$encuesta->sid.' tok where tok.completed="N" and tok.attribute_1= ?) as pdtes,'.
 				' ( select count(1) from tokens_'.$encuesta->sid.' tok WHERE tok.attribute_1=?) as tot', 
-				[Auth::user()->name, Auth::user()->name]);
+				[Auth::user()->id, Auth::user()->id]);
 						
 			$encuesta = (array)$encuesta;
 			$encuesta['pdtes'] = $encuestaTotales[0]->pdtes;

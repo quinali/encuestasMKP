@@ -55,6 +55,18 @@ class OperadoresController extends Controller
 					->orderBy('order','asc')
 					->get();
 
+
+		$OpTotal = DB::table('survey_operators')
+					->where('idSurvey',$sid)
+					->count();			
+
+		
+		$OpConLlamada=DB::table('tokens_'.$sid)
+					->whereNotNull('attribute_1')
+					->groupBy('attribute_1')
+					->select('attribute_1')
+					->lists('attribute_1');
+
 		$data = array();
 
 		$data['sid']=$sid;
@@ -63,6 +75,11 @@ class OperadoresController extends Controller
 		$data['opAsignados']=$opAsignados;
 		$data['opAsignados']=$opAsignados;
 		$data['opIdAsignados']=json_encode($opIdAsignados);
+
+		$data['OpConLlamada']=sizeof($OpConLlamada);			
+		$data['OpTotal']=$OpTotal;	
+
+
 		
 		return view('admin\operadores' , ['data' => $data]);	
 		

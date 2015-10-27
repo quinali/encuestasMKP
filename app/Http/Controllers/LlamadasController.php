@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Admin\SettingsController;
 use DB;
 use Log;
 use Auth;
@@ -49,7 +50,7 @@ class LlamadasController extends Controller
 		}
 
 	
-		$totalLlamadas=$this->getLlamadasTotals($sid, Auth::user()->name );
+		$totalLlamadas=$this->getLlamadasTotals($sid, Auth::user()->id );
 		$totalPages = ceil($totalLlamadas->totalAsignadas / $this->numResultaPerPag);
 		
 		$page = $request->input('page');
@@ -76,8 +77,8 @@ class LlamadasController extends Controller
 		Session::put('page', $page);
 		
 		
-		Log::info('LlamadasController::index('.$sid.','.Auth::user()->name.',page='.$page.')');
-		$llamadas=$this->getLlamadas($sid, Auth::user()->name, $page , $this->numResultaPerPag);
+		Log::info('LlamadasController::index('.$sid.','.Auth::user()->id.',page='.$page.')');
+		$llamadas=$this->getLlamadas($sid, Auth::user()->id, $page , $this->numResultaPerPag);
 		
 		$data = array();
 		$data['sid']=$sid;
@@ -111,20 +112,20 @@ class LlamadasController extends Controller
 	}
 	
 	
-	public function getLlamadasTotals($sid,$nameOperador)
+	public function getLlamadasTotals($sid,$idOperador)
 	{
 		$sqlTotalCount ="SELECT ".
 						"(SELECT surveyls_title FROM surveys_languagesettings WHERE surveyls_survey_id =".$sid.") as tituloEncuesta,".
-						"(SELECT count(1) FROM `tokens_".$sid."` WHERE `attribute_1` ='".$nameOperador."' and completed='N') as totalPtes,".
-						"(SELECT count(1) FROM `tokens_".$sid."` WHERE `attribute_1` ='".$nameOperador."' and completed<>'N' ) as totalEmitidas,".
-						"(SELECT count(1) FROM `tokens_".$sid."` WHERE `attribute_1` ='".$nameOperador."') as totalAsignadas" ;
+						"(SELECT count(1) FROM `tokens_".$sid."` WHERE `attribute_1` ='".$idOperador."' and completed='N') as totalPtes,".
+						"(SELECT count(1) FROM `tokens_".$sid."` WHERE `attribute_1` ='".$idOperador."' and completed<>'N' ) as totalEmitidas,".
+						"(SELECT count(1) FROM `tokens_".$sid."` WHERE `attribute_1` ='".$idOperador."') as totalAsignadas" ;
 
 		return DB::select($sqlTotalCount)[0];
 	
 	}
 	
 	
-	public function getLlamadas( $sid, $nameOperador, $page)
+	public function getLlamadas( $sid, $idOperador, $page)
 	{
 
 		$recallField=$this->getRecallConfig($sid);
@@ -136,7 +137,8 @@ class LlamadasController extends Controller
 					"tok.tid,tok.firstname,tok.lastname,".
 					"tok.token,tok.attribute_2,tok.attribute_3,tok.attribute_4,".
 					"tok.completed,tok.usesleft as intentos,".
-					" srv.`".$sid.$recallField['contact']."` as CONTACT,srv.`".$sid.$recallField['motiv']."` as MOTIV ".
+					" srv.`".$recallField['contact']."` as CONTACT,".
+					" srv.`".$recallField['motiv']."` as MOTIV ".
 					", anws.answer ".
 					" from tokens_".$sid." tok ".
 					" left join ( ".
@@ -144,8 +146,8 @@ class LlamadasController extends Controller
 					"      from survey_".$sid." srvMax ".
 					"    group by srvMax.token) as maxIDTable  on tok.token=maxIDTable.token".
 					" left join survey_".$sid." srv on maxIDTable.maxid = srv.id ".
-					" left join answers anws on (anws.qid=".$recallField['anws_qid']." and srv.`".$sid.$recallField['anws_code']."` = anws.code)".
-					" where tok.attribute_1='".$nameOperador."' order by tok.tid ".
+					" left join answers anws on (anws.qid=".$recallField['anws_qid']." and srv.`".$recallField['anws_code']."` = anws.code)".
+					" where tok.attribute_1='".$idOperador."' order by tok.tid ".
 					" LIMIT ".$startCall.",".$this->numResultaPerPag;
 		
 		$llamadas = DB::select($sqlToken);	
@@ -157,17 +159,20 @@ class LlamadasController extends Controller
 	
 	
 	public function getRecallConfig($sid){
-		
-		$recallFieldSql="select `key`, value from plugin_settings where model='mkp_recall' and `key`=".$sid;
-		$recallField=DB::select($recallFieldSql)[0];
-		
-		$recallConfig = explode(",",$recallField->value );
-		
+	
 		$recallFieldData = array();
-		$recallFieldData['anws_qid']=$recallConfig[0];
-		$recallFieldData['contact']=$recallConfig[1];
-		$recallFieldData['motiv']=$recallConfig[2];
-		$recallFieldData['anws_code']=$recallConfig[3];
+
+		$gid = SettingsController::getAnwswerGroup($sid);
+
+		$tablePrefix = $sid.'X'.$gid.'X';
+
+		$recallFieldData['anws_qid']=$gid;
+		
+		$recallFieldData['contact']=$tablePrefix.SettingsController::getHaConstactadoAnswer($sid);
+		
+		$recallFieldData['motiv']=$tablePrefix.SettingsController::getRellamadaAnswer($sid);
+		
+		$recallFieldData['anws_code']=$tablePrefix.SettingsController::getMotivoRellamarAnswer($sid);
 		
 		return $recallFieldData;
 		
