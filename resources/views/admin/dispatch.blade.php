@@ -49,34 +49,39 @@
 
      <div class="row">
             <div class="col-lg-9 ">
-
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h3 class="panel-title"><i class="fa fa-phone fa-fw"></i> Asignación de llamadas</h3>
                     </div>
                     <!-- LISTADOS -->
                     <div class="panel-body">
-                            
-                            {!! Form::open(['route' => ['admin.reassign', $data["sid"]] , 'method' => 'post']) !!} 
-                            <div> 
-                                <label>{!! Form::label('desde', 'Llamadas desde') !!}</label>
-                                {!! Form::number('desde',"1",['id'=>'desde','size'=>'4']) !!}
+                        <div class="row">
+                            <div class="col-lg-9 ">                          
+                                {!! Form::open(['route' => ['admin.reassign', $data["sid"]] , 'method' => 'post']) !!} 
                                 
-                                <label>{!! Form::label('hasta', 'hasta') !!}</label>
+                                    <label>{!! Form::label('desde', 'Llamadas desde') !!}</label>
+                                    {!! Form::number('desde',"1",['id'=>'desde','size'=>'4']) !!}
+                                    
+                                    <label>{!! Form::label('hasta', 'hasta') !!}</label>
 
-                                {!! Form::number('hasta',$data['nLlamadasPendientes'],['id'=>'hasta','size'=>'4']) !!}
-                                <br/>
-                                <button type="submit" class="btn btn-info"><span class="glyphicon glyphicon-refresh"></span> Asignar</button>    
-                            {!! Form::close() !!} 
-                            <br/>
-                            {!! Form::open(['route' => ['admin.deallocate', $data["sid"]] , 'method' => 'post']) !!} 
-                                <button type="submit" class="btn btn-info"><span class="glyphicon glyphicon-erase"></span> Borrar asignaciones</button>    
-                            {!! Form::close() !!} 
+                                    {!! Form::number('hasta',$data['nLlamadasPendientes'],['id'=>'hasta','size'=>'4']) !!}
+                                   
+                                    <button type="submit" class="btn btn-info"><span class="glyphicon glyphicon-refresh"></span> Asignar</button>    
+                                {!! Form::close() !!} 
                             </div>
-
-                           
+                          </div>      
                     </div>
                 </div>
+            </div>
+        </div>
+
+       <div class="row">
+            <div class="col-lg-9 ">
+                <div class="panel panel-default pull-right">
+                    {!! Form::open(['route' => ['admin.deallocate', $data["sid"]] , 'method' => 'post']) !!} 
+                        <button type="submit" class="btn btn-info"><span class="glyphicon glyphicon-erase"></span> Borrar asignaciones</button>    
+                     {!! Form::close() !!}
+                </div>      
             </div>
         </div>
     </div>
