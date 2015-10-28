@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use DB;
-use Log;
+use Redirect;
 
 class CkeckAdmin
 {
@@ -29,6 +29,9 @@ class CkeckAdmin
             return response('Unauthorized.', 401);
         }
 
+
         return $next($request);
     }
+  
+   
 }

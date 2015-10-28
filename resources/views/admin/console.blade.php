@@ -13,8 +13,8 @@
                 </ul>
             </div>
         </nav>
-
     <!-- /.navbar-collapse -->
+
   	<div id="page-wrapper">
 		
 		<div class="container-fluid">
@@ -23,7 +23,7 @@
 			<div class="row">
                     <div class="col-lg-12">
                         <h1 class="page-header">
-                            Administración encuestas activas:
+                            Administración encuestas:
                         </h1>
                     	<ol class="breadcrumb">
 		                	<li class="active">
@@ -37,10 +37,7 @@
                     </div>
                 </div>    
                 <!-- /.row -->
-
-
                 <!-- Zona del mensaje -->
-
                <div class="row">
                     <div class="col-lg-12">
                         <div class="alert alert-info alert-dismissable">
@@ -50,9 +47,6 @@
                     </div>
                 </div>
                 <!-- /.row -->
-
-
-
 					
 				<div class="row">
                     	<div class="col-lg-12">

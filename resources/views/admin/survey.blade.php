@@ -1,8 +1,5 @@
 @extends('layouts.app2')
 @section('content')
-{!! Html::style('assets/css/dashboard.css') !!}
-{!! Html::style('assets/css/sb-admin.css') !!} 
-{!! Html::style('assets/css/llamadas.css') !!}
 
 <!-- Morris Charts CSS -->
 {!! Html::style('assets/css/plugins/morris.css') !!}
@@ -25,138 +22,150 @@
         </li>
 	</ul>
 </div>
+</nav>
 <!-- /.navbar-collapse -->
 
-<div class="container-fluid">
-	<div class="row">
-		<div class="col-md-12 ">
-			<div class="panel panel-default">
-				
-				<!-- Page Heading -->
-                <!-- Page Heading -->
-                <div class="row">
-                    <div class="col-lg-12 col-md-offset-1">
+<div id="page-wrapper">
+
+    <div class="container-fluid">
+	
+        <!-- Page Heading -->
+            <div class="row">
+                    <div class="col-lg-12">
                         <h1 class="page-header">
                             {{$data['survey_title']}}
                         </h1>
-                    </div>
-
-					<div class="panel-heading col-md-offset-1">
-                    	<ol class="breadcrumb">
-		                	<li class="active">
-		                    	<i class="fa fa-dashboard"></i> Dashboard
-		                     </li>
-		                </ol>
+                        <ol class="breadcrumb">
+                            <li class="active">
+                                <i class="fa fa-dashboard"></i> Encuesta
+                             </li>
+                             <li>
+                                <i class="fa fa-bar-chart"></i>
+                                <a href='#'>Panel de encuesta</a>
+                            </li>
+                        </ol>
                     </div>
                 </div>    
                 <!-- /.row -->
-                <div class="row">
-				<div class="col-lg-12 col-md-6">	
-                    <div class="col-lg-3 col-md-6">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                <div class="row">
-                                    <div class="col-xs-3">
-                                        <i class="fa fa-phone fa-5x"></i>
-                                    </div>
-                                    <div class="col-xs-9 text-right">
-                                        <div class="huge">{{$data['LlamPdtesNoRealizadas']}}</div>
-                                        <div>Ptes.</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <a href="#">
-    							<div class="panel-footer">
-                                        <span class="pull-left">View Details</span>
-                                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                        <div class="clearfix"></div>
-                                </div>
-                            </a>
+              
+                <!-- Zona del mensaje -->
+               <div class="row">
+                    <div class="col-lg-12">
+                        <div class="alert alert-info alert-dismissable">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                            <i class="fa fa-info-circle"></i>  <strong>Like SB Admin?</strong> Try out <a href="http://startbootstrap.com/template-overviews/sb-admin-2" class="alert-link">SB Admin 2</a> for additional features!
                         </div>
                     </div>
-                     <div class="col-lg-3 col-md-6">
-                        <div class="panel panel-green">
-                            <div class="panel-heading">
-                                <div class="row">
-                                    <div class="col-xs-3">
-                                        <i class="fa fa-phone fa-5x"></i>
-                                    </div>
-                                    <div class="col-xs-9 text-right">
-                                        <div class="huge">{{$data['LlamPdtesRecuperadas']}}</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <a href="#">
-                                <div class="panel-footer">
-                                    <span class="pull-left">Recuperadas Ptes.</span>
-                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                    <div class="clearfix"></div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6">
-                        <div class="panel panel-yellow">
-                            <div class="panel-heading">
-                                <div class="row">
-                                    <div class="col-xs-3">
-                                        <i class="fa fa-phone fa-5x"></i>
-                                    </div>
-                                    <div class="col-xs-9 text-right">
-                                        <div class="huge">{{$data['LlamEmitidasRecuperables']}}</div>
-                                     </div>
-                                </div>
-                            </div>
-                            <a href="#">
-                                <div class="panel-footer">
-                                    <span class="pull-left">Hechas Recuperables.</span>
-                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                    <div class="clearfix"></div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6">
-                        <div class="panel panel-red">
-                            <div class="panel-heading">
-                                <div class="row">
-                                    <div class="col-xs-3">
-                                        <i class="fa fa-phone fa-5x"></i>
-                                    </div>
-                                    <div class="col-xs-9 text-right">
-                                        <div class="huge">{{$data['LlamEmitidasNoRecuperables']}}</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <a href="#">
-                                <div class="panel-footer">
-                                    <span class="pull-left">Hechas NO Recuperables.</span>
-                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                    <div class="clearfix"></div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-    			</div>
-            </div>    
-            <!-- /.row -->	
+                </div>
+                <!-- /.row -->
 
                 <!-- ZONA DE CONTADORES -->
+                <div class="row">
+                    <div class="col-lg-12 col-md-6">    
+                        <div class="col-lg-3 col-md-6">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <div class="row">
+                                        <div class="col-xs-3">
+                                            <i class="fa fa-phone fa-5x"></i>
+                                        </div>
+                                        <div class="col-xs-9 text-right">
+                                            <div class="huge">{{$data['LlamPdtesNoRealizadas']}}</div>
+                                            <div>Ptes.</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <a href="#">
+                                    <div class="panel-footer">
+                                            <span class="pull-left">View Details</span>
+                                            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                            <div class="clearfix"></div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                         <div class="col-lg-3 col-md-6">
+                            <div class="panel panel-green">
+                                <div class="panel-heading">
+                                    <div class="row">
+                                        <div class="col-xs-3">
+                                            <i class="fa fa-phone fa-5x"></i>
+                                        </div>
+                                        <div class="col-xs-9 text-right">
+                                            <div class="huge">{{$data['LlamPdtesRecuperadas']}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <a href="#">
+                                    <div class="panel-footer">
+                                        <span class="pull-left">Recuperadas Ptes.</span>
+                                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <div class="panel panel-yellow">
+                                <div class="panel-heading">
+                                    <div class="row">
+                                        <div class="col-xs-3">
+                                            <i class="fa fa-phone fa-5x"></i>
+                                        </div>
+                                        <div class="col-xs-9 text-right">
+                                            <div class="huge">{{$data['LlamEmitidasRecuperables']}}</div>
+                                         </div>
+                                    </div>
+                                </div>
+                                <a href="#">
+                                    <div class="panel-footer">
+                                        <span class="pull-left">Hechas Recuperables.</span>
+                                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <div class="panel panel-red">
+                                <div class="panel-heading">
+                                    <div class="row">
+                                        <div class="col-xs-3">
+                                            <i class="fa fa-phone fa-5x"></i>
+                                        </div>
+                                        <div class="col-xs-9 text-right">
+                                            <div class="huge">{{$data['LlamEmitidasNoRecuperables']}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <a href="#">
+                                    <div class="panel-footer">
+                                        <span class="pull-left">Hechas NO Recuperables.</span>
+                                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+            </div>    
+            <!-- /.row -->  
 
 
-                <!-- ./contadores -->
 
-                	<!-- GRAFICA -->
-					<div class="panel-body">
-						<div class="row">
+    <div class="row">
+		<div class="col-lg-12 ">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+                    <h3 class="panel-title"><i class="fa fa-bar-chart fa-fw"></i> Llamadas por operador</h3>
+                </div>
+
+               	<!-- GRAFICA -->
+				<div class="panel-body">
+					<div class="row">
                     		<div class="col-lg-12">
-                        		<div class="panel panel-default">
-                            		<div class="panel-heading">
-                                		<h3 class="panel-title"><i class="fa fa-bar-chart-o fa-fw"></i> Llamadas por operador</h3>
-                            		</div>
-                            		
-                            		<div class="panel-body">
-                            			<div id="graph"></div>
+
+                       			<div id="graph"></div>
 
                             			<script>
 											Morris.Bar({
@@ -186,14 +195,13 @@
 								 </div>
                     	</div>
                 	</div>	
-                	 <!-- /.row -->
 
-					</div>
-				</div>
+                    </div>
+                </div>
+                <!-- /.row -->
 			</div>
 		</div>						
 
-		<!-- ./row -->
-</div>
+		
 
 @endsection
