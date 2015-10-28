@@ -21,19 +21,14 @@ class SurveyController extends Controller
 	
 	public function index($sid)
 	{
-		log::debug("Entrando en zona de administracion de encuesta ".$sid);
-		
-		
 		$surveys_languagesettings = DB::table('surveys_languagesettings')
 					->where('surveyls_survey_id',$sid)
 					->first();
-
 
 		$llamadasPdtesNoRealizadas = DB::table('tokens_'.$sid)
 					->where('completed','N')
 					->where('usesleft','1')
 					->count();
-					
 		
 		$llamadasPdtesRecuperadas = DB::table('tokens_'.$sid)
 					->where('completed','N')
@@ -62,8 +57,6 @@ class SurveyController extends Controller
 
 		$llamadasEmitidasNORecuperables = DB::select($sqlLlamadasEmitidasNoRecuperables);
 
-
-
 		$sqlOperadores ="	SELECT uOp.name as name, ".
 						"	(select count(1) from tokens_".$sid." tk2 where tk2.attribute_1=tok1.operador and completed='N' and usesleft=1) as ptesNuncaRealizadas, ".
 						"	(select count(1) from tokens_".$sid." tk2 where tk2.attribute_1=tok1.operador and completed='N' and usesleft<>1) as ptesRecuperadas, ".
@@ -90,10 +83,7 @@ class SurveyController extends Controller
 						"	left join usuarios_operadores uOp on tok1.operador=uOp.id ".
 						"	order by uOp.`order` ";
 
-
 		$llamadasPorOperadores = DB::select($sqlOperadores);					
-		
-
 
 		$data = array();
 		$data['survey_title']=$surveys_languagesettings->surveyls_title;

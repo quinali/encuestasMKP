@@ -22,9 +22,6 @@ class SettingsController extends Controller
 	
 	public function index($sid)
 	{
-		log::debug("Entrando en la edicion de parametros de la encuestas ".$sid);
-		
-		
 		$surveys_languagesettings = DB::table('surveys_languagesettings')
 									->where('surveyls_survey_id',$sid)
 									->first();
@@ -32,7 +29,6 @@ class SettingsController extends Controller
 		$plugin_settings = DB::table('plugin_settings')
 									->where('key',$sid)
 									->first();
-		
 		$data = array();
 		
 		$data['sid']=$sid;
@@ -41,32 +37,25 @@ class SettingsController extends Controller
 		$data['surveyls_urldescription']=$surveys_languagesettings->surveyls_urldescription;
 		$data['pluggins_settings']=$plugin_settings->value;
 		
-		
 		return view('admin\settings_edit',['data' => $data]);	
-		
 	}
 	
-	
-	
+
+
 	public function calculateUrl(Request $request,$sid){
 
-		log::debug("----->calculateUrl()");
-
 		return ($request->root().'/llamadas/'.$sid);
-
 	}
+
 
 	public function calculateUrlTitle($sid){
 
 		$urlTitle="Listado de clientes";
-
 		return ($urlTitle);
-
-
 	}
 
-	public function calculatePlugginSetting($sid){
 
+	public function calculatePlugginSetting($sid){
 
 		$gid=$this->getAnwswerGroup($sid);
 
@@ -77,9 +66,7 @@ class SettingsController extends Controller
 		$plugin_settings=$qid3.",X".$gid."X".$qid1.",X".$gid."X".$qid2.",X".$gid."X".$qid3;
 
 		return ($plugin_settings);
-
 	}
-
 
 
 	public function updateUrl(Request $request,$sid){
@@ -90,13 +77,8 @@ class SettingsController extends Controller
 				->where('surveyls_survey_id',$sid)
 				->update(['surveyls_url'=>$request->input('url')]);
 
-			return $this->index($sid)->with('status', 'URL actualizada correctamente!');
-
-
-
-
-
-	}
+			return Redirect::to('survey/'.$sid.'/settings')->with('status', 'URL actualizada correctamente');
+}
 
 
 
@@ -108,7 +90,7 @@ class SettingsController extends Controller
 				->where('surveyls_survey_id',$sid)
 				->update(['surveyls_urldescription'=>$request->input('title')]);
 
-			return $this->index($sid);
+			return Redirect::to('survey/'.$sid.'/settings')->with('status', 'Titulo de la URL actualizado correctamente');	
 	}
 
 

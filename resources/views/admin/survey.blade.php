@@ -49,14 +49,7 @@
                 <!-- /.row -->
               
                 <!-- Zona del mensaje -->
-               <div class="row">
-                    <div class="col-lg-12">
-                        <div class="alert alert-info alert-dismissable">
-                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                            <i class="fa fa-info-circle"></i>  <strong>Like SB Admin?</strong> Try out <a href="http://startbootstrap.com/template-overviews/sb-admin-2" class="alert-link">SB Admin 2</a> for additional features!
-                        </div>
-                    </div>
-                </div>
+                @include('mensaje')
                 <!-- /.row -->
 
                 <!-- ZONA DE CONTADORES -->
@@ -71,17 +64,15 @@
                                         </div>
                                         <div class="col-xs-9 text-right">
                                             <div class="huge">{{$data['LlamPdtesNoRealizadas']}}</div>
-                                            <div>Ptes.</div>
                                         </div>
                                     </div>
                                 </div>
-                                <a href="#">
-                                    <div class="panel-footer">
-                                            <span class="pull-left">View Details</span>
-                                            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                            <div class="clearfix"></div>
-                                    </div>
-                                </a>
+                                
+                                <div class="panel-footer">
+                                    <span class="pull-left panel-heading-label">Pendientes</span>
+                                    <div class="clearfix"></div>
+                                </div>
+                                
                             </div>
                         </div>
                          <div class="col-lg-3 col-md-6">
@@ -96,13 +87,10 @@
                                         </div>
                                     </div>
                                 </div>
-                                <a href="#">
-                                    <div class="panel-footer">
+                                <div class="panel-footer">
                                         <span class="pull-left">Recuperadas Ptes.</span>
-                                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                                         <div class="clearfix"></div>
-                                    </div>
-                                </a>
+                                </div>
                             </div>
                         </div>
                         <div class="col-lg-3 col-md-6">
@@ -117,13 +105,10 @@
                                          </div>
                                     </div>
                                 </div>
-                                <a href="#">
-                                    <div class="panel-footer">
-                                        <span class="pull-left">Hechas Recuperables.</span>
-                                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                        <div class="clearfix"></div>
-                                    </div>
-                                </a>
+                                <div class="panel-footer">
+                                    <span class="pull-left">Hechas Recuperables.</span>
+                                    <div class="clearfix"></div>
+                                </div>
                             </div>
                         </div>
                         <div class="col-lg-3 col-md-6">
@@ -138,13 +123,10 @@
                                         </div>
                                     </div>
                                 </div>
-                                <a href="#">
-                                    <div class="panel-footer">
-                                        <span class="pull-left">Hechas NO Recuperables.</span>
-                                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                        <div class="clearfix"></div>
-                                    </div>
-                                </a>
+                                <div class="panel-footer">
+                                    <span class="pull-left">Hechas NO Recuperables.</span>
+                                    <div class="clearfix"></div>
+                                </div>
                             </div>
                         </div>
                     </div>

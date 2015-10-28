@@ -42,16 +42,10 @@
                     </div>
                 </div>    
                 <!-- /.row -->
+                
                 <!-- Zona del mensaje -->
-               <div class="row">
-                    <div class="col-lg-9">
-                        <div class="alert alert-info alert-dismissable">
-                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                            <i class="fa fa-info-circle"></i>  <strong>Like SB Admin?</strong> Try out <a href="http://startbootstrap.com/template-overviews/sb-admin-2" class="alert-link">SB Admin 2</a> for additional features!
-                        </div>
-                    </div>
-                </div>
-                <!-- /.row -->
+                @include('mensaje')
+                
 
      <div class="row">
             <div class="col-lg-9 ">
@@ -62,7 +56,25 @@
                     </div>
                     <!-- LISTADOS -->
                     <div class="panel-body">
-                   
+                            
+                            {!! Form::open(['route' => ['admin.reassign', $data["sid"]] , 'method' => 'post']) !!} 
+                            <div> 
+                                <label>{!! Form::label('desde', 'Llamadas desde') !!}</label>
+                                {!! Form::number('desde',"1",['id'=>'desde','size'=>'4']) !!}
+                                
+                                <label>{!! Form::label('hasta', 'hasta') !!}</label>
+
+                                {!! Form::number('hasta',$data['nLlamadasPendientes'],['id'=>'hasta','size'=>'4']) !!}
+                                <br/>
+                                <button type="submit" class="btn btn-info"><span class="glyphicon glyphicon-refresh"></span> Asignar</button>    
+                            {!! Form::close() !!} 
+                            <br/>
+                            {!! Form::open(['route' => ['admin.deallocate', $data["sid"]] , 'method' => 'post']) !!} 
+                                <button type="submit" class="btn btn-info"><span class="glyphicon glyphicon-erase"></span> Borrar asignaciones</button>    
+                            {!! Form::close() !!} 
+                            </div>
+
+                           
                     </div>
                 </div>
             </div>

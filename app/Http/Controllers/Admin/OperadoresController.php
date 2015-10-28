@@ -110,7 +110,7 @@ class OperadoresController extends Controller
 				]);
 		}
 
-		return Redirect::to('survey/'.$sid.'/operadores')->with('status', '¡Operadores asignados guardados correctamente!');
+		return Redirect::to('survey/'.$sid.'/operadores')->with('status', '¡Operadores asignados correctamente!');
 
 	}
 
