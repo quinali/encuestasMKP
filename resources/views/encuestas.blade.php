@@ -1,10 +1,25 @@
 @extends('layouts.app')
 @section('content')
-<div class="container">
+<div id="page-wrapper">
+	<div class="container-fluid">
+		
+		<div class="row">
+			<div class="col-lg-12 col-md-offset-1">
+				<h1 class="page-header">
+					<small>Encuestas
+				</h1>
+			</div>
+		</div>    
+        <!-- /.row -->
+		
+		<!-- Zona del mensaje -->
+        @include('mensaje')
+        <!-- /.row -->		
+		
 	<div class="row">
 		<div class="col-md-10 col-md-offset-1">
 			<div class="panel panel-default">
-				<div class="panel-heading">Listado <small>de encuestas activas</small></div>
+				<div class="panel-heading">Listado encuestas activas</div>
 
 				<div class="panel-body">
 					<table id="encuestas" class="kkk table table-bordered table-hover">
@@ -35,5 +50,6 @@
 			</div>
 		</div>
 	</div>
+</div>
 </div>
 @endsection
