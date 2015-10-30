@@ -76,14 +76,20 @@ class LlamadasController extends Controller
 		//Store $page in session
 		Session::put('page', $page);
 		
+		$surveyTitle=DB::Table('surveys_languagesettings')
+						->where('surveyls_survey_id',$sid)
+						->select('surveyls_title')
+						->first()->surveyls_title;
+
 		
 		Log::info('LlamadasController::index('.$sid.','.Auth::user()->id.',page='.$page.')');
 		$llamadas=$this->getLlamadas($sid, Auth::user()->id, $page , $this->numResultaPerPag);
 		
-		//var_dump($llamadas);
+		//var_dump($surveyTitle);
 
 		$data = array();
 		$data['sid']=$sid;
+		$data['surveyTitle']=$surveyTitle;
 		$data['totalPages']=$totalPages;
 		$data['isConfirmacion']=$isConfirmacion;
 		$data['page']=$page;

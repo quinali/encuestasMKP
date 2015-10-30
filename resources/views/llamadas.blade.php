@@ -6,7 +6,7 @@
 		<div class="row">
 			<div class="col-lg-12 col-md-offset-1">
 				<h1 class="page-header">
-					
+					{{ $data['surveyTitle'] }}
 				</h1>
 			</div>
 		</div>    
@@ -113,13 +113,13 @@
 												@endif
 													
 													<!-- Columna recuperar-->
-												@if (($llamada->completed <> 'N' and $llamada->CONTACT == 'A2' and $llamada->MOTIV == 'A2')))
+												@if (($llamada->completed === 'N' and $llamada->CONTACT === 'N' and $llamada->MOTIV === 'A1') OR ($llamada->CONTACT === 'A2' and $llamada->MOTIV === 'A1'))
 													<td><span class='orange'>{{$llamada->answer}}</span></td>
-												@elseif($llamada->completed <> 'N' and ($llamada->CONTACT = 'A2' and $llamada->MOTIV = 'A1'))
+												@elseif(($llamada->CONTACT === 'N' and $llamada->MOTIV === 'A1') OR ($llamada->CONTACT === 'A2' and $llamada->MOTIV ==='A1'))
 													<td><a href='../rellamar/{{$data['sid']}}/{{$llamada->tid}}'><span class='red! glyphicon glyphicon-refresh'></span> <span class='red'>{{$llamada->answer}}</span></td>	
 												@else
 													<td></td>
-												@endif	
+												@endif
 													
 												<!-- Columna intentos-->
 													<td>
