@@ -151,7 +151,16 @@ class SettingsController extends Controller
 		$qid3 = DB::select( DB::raw($sqlQid3), array('sid' => $sid))[0]->qid;
 
 		return $qid3;
+	}
 
+	public static function getObservacionesAnswerColumn($sid){
+		
+		$sqlQid= " select gid,qid from questions q where sid=:sid and locate('indique las observaciones',question)<>0";
+				
+		$gid = DB::select( DB::raw($sqlQid), array('sid' => $sid))[0]->gid;
+		$qid = DB::select( DB::raw($sqlQid), array('sid' => $sid))[0]->qid;
+
+		return $sid."X".$gid."X".$qid;
 	}
 
 }

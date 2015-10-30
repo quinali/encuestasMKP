@@ -37,6 +37,7 @@ Route::get('survey/{sid}/settings',  				['uses' => 'Admin\SettingsController@in
 Route::get('survey/{sid}/dispatch', 				['uses' => 'Admin\DispatchController@index']);
 Route::post('survey/{sid}/dispatch', 				['as'=>'admin.reassign','uses' => 'Admin\DispatchController@reassign']);
 Route::post('survey/{sid}/deallocate', 				['as'=>'admin.deallocate','uses' => 'Admin\DispatchController@deallocate']);
+Route::post('survey/{sid}/recover', 				['as'=>'admin.recover','uses' => 'Admin\DispatchController@recover']);
 
 Route::get('survey/{sid}/settings/url', 			['uses' => 'Admin\SettingsController@calculateUrl']);
 Route::get('survey/{sid}/settings/urlTitle',		['uses' => 'Admin\SettingsController@calculateUrlTitle']);

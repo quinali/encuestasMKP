@@ -80,6 +80,8 @@ class LlamadasController extends Controller
 		Log::info('LlamadasController::index('.$sid.','.Auth::user()->id.',page='.$page.')');
 		$llamadas=$this->getLlamadas($sid, Auth::user()->id, $page , $this->numResultaPerPag);
 		
+		//var_dump($llamadas);
+
 		$data = array();
 		$data['sid']=$sid;
 		$data['totalPages']=$totalPages;
@@ -98,17 +100,37 @@ class LlamadasController extends Controller
 	
 	
 	//Reseteamos la llamada y recargamos la pagina
-	public function rellamar($sid,$tid){
+	public static function recover($sid,$tid){
 		
-		Log::info('LlamadasController::rellamar('.$sid.','.$tid.')');
+		$tokenRecuperable=DB::Table('tokens_'.$sid)
+							->where('tid', $tid)
+							->first();
+
+		//Sacamos la ultima observacion
+		$sqlUltimaObs=	" select sv.`".SettingsController::getObservacionesAnswerColumn($sid)."` as observaciones ".
+							" from ( select token,max(id) as maxid from survey_".$sid." group by token) as maxTable ".
+							" inner join survey_".$sid." as sv on maxTable.token=sv.token and maxTable.maxId = sv.id ".
+							" where maxTable.token='".$tokenRecuperable->token."'";
+
+		$ultimaObs = DB::select($sqlUltimaObs)[0]->observaciones;			
+
+		log::debug("Vamos a recuperar el token ".$tid." y le vamos a poner la obs:".$ultimaObs);
 		
 		//Actualizo el token recibido
 		DB::table( 'tokens_'.$sid)
             ->where('tid', $tid)
-            ->update(['completed' => 'N']);
+            ->update(['completed' => 'N',
+            		  'attribute_2' => $ultimaObs]);
 		
+	}
+
+	public function rellamar($sid,$tid){
+
+		$this->recover($sid,$tid);
+
 		//Redirijo a llamadas
 		return Redirect::to('llamadas/'.$sid.'#'.$tid)->with('status', '¡Llamada recuperada con éxito!');
+
 	}
 	
 	
@@ -135,7 +157,7 @@ class LlamadasController extends Controller
 		
 		$sqlToken=	"SELECT ".
 					"tok.tid,tok.firstname,tok.lastname,".
-					"tok.token,tok.attribute_2,tok.attribute_3,tok.attribute_4,".
+					"tok.token,tok.attribute_3,tok.attribute_4,tok.attribute_5,".
 					"tok.completed,tok.usesleft as intentos,".
 					" srv.`".$recallField['contact']."` as CONTACT,".
 					" srv.`".$recallField['motiv']."` as MOTIV ".
@@ -150,6 +172,8 @@ class LlamadasController extends Controller
 					" where tok.attribute_1='".$idOperador."' order by tok.tid ".
 					" LIMIT ".$startCall.",".$this->numResultaPerPag;
 		
+		log::debug($sqlToken);			
+
 		$llamadas = DB::select($sqlToken);	
 		
 		return $llamadas;
@@ -166,7 +190,7 @@ class LlamadasController extends Controller
 
 		$tablePrefix = $sid.'X'.$gid.'X';
 
-		$recallFieldData['anws_qid']=$gid;
+		$recallFieldData['anws_qid']=SettingsController::getMotivoRellamarAnswer($sid);
 		
 		$recallFieldData['contact']=$tablePrefix.SettingsController::getHaConstactadoAnswer($sid);
 		

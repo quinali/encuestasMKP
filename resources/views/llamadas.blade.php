@@ -105,17 +105,17 @@
 													<td>{{$llamada->firstname}} {{$llamada->lastname}}</td>
 													
 												@if ($data['isConfirmacion'] === FALSE)
-													<td>{{$llamada->attribute_2}}</td>
 													<td>{{$llamada->attribute_3}}</td>
+													<td>{{$llamada->attribute_4}}   {{$llamada->completed}}, {{$llamada->CONTACT}},{{$llamada->MOTIV}}</td>
 												@else									
-													<td>{{$llamada->attribute_2}}</td>
-													<td>{{$llamada->attribute_3}} - {{$llamada->attribute_4}}</td>
+													<td>{{$llamada->attribute_3}}</td>
+													<td>{{$llamada->attribute_4}} - {{$llamada->attribute_5}}</td>
 												@endif
 													
 													<!-- Columna recuperar-->
-												@if (($llamada->completed === 'N' and $llamada->CONTACT === 'N' and $llamada->MOTIV === 'A1') OR ($llamada->CONTACT === 'A2' and $llamada->MOTIV === 'A1'))
+												@if (($llamada->completed <> 'N' and $llamada->CONTACT == 'A2' and $llamada->MOTIV == 'A2')))
 													<td><span class='orange'>{{$llamada->answer}}</span></td>
-												@elseif(($llamada->CONTACT === 'N' and $llamada->MOTIV === 'A1') OR ($llamada->CONTACT === 'A2' and $llamada->MOTIV ==='A1'))
+												@elseif($llamada->completed <> 'N' and ($llamada->CONTACT = 'A2' and $llamada->MOTIV = 'A1'))
 													<td><a href='../rellamar/{{$data['sid']}}/{{$llamada->tid}}'><span class='red! glyphicon glyphicon-refresh'></span> <span class='red'>{{$llamada->answer}}</span></td>	
 												@else
 													<td></td>

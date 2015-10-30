@@ -3,13 +3,16 @@
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
+use App\User;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\LlamadasController;
+
 use DB;
 use Log;
 use Auth;
-use App\User;
 use Redirect;
+
 
 class DispatchController extends Controller
 {
@@ -113,6 +116,31 @@ class DispatchController extends Controller
 		return Redirect::to('survey/'.$sid)->with('status', 'Proceso de reasignación de llamadas, realizado correctamente');
 	}
 
+
+	public function recover($sid)
+	{
+
+		$rellamadaColumn = $sid.'X'.SettingsController::getAnwswerGroup($sid).'X'.SettingsController::getRellamadaAnswer($sid);			
+
+		$sqlTokensRecuperables=	" select tid,token from tokens_".$sid." where token in ".
+								" ( ".
+								" 	select maxTable.token ".
+								" 	from ( select token,max(id) as maxid from survey_".$sid." group by token) as maxTable ".
+								" 	inner join survey_".$sid." as sv on maxTable.token=sv.token and maxTable.maxId = sv.id ".
+								" 	where `".$rellamadaColumn."`='A1' ".
+								"  ) and tokens_".$sid.".completed<>'N'";
+		
+		$tokensRecuperables = DB::select($sqlTokensRecuperables);		
+
+		foreach( $tokensRecuperables as $tokenRecuperable){
+
+			//Recuperamos cada llamada
+			LlamadasController::recover($sid,$tokenRecuperable->tid);
+
+		}
+
+		return Redirect::to('survey/'.$sid)->with('status', 'Proceso de recuperacion de llamadas, realizado correctamente');						
+	}
 
 	public function deallocate($sid){
 
