@@ -8,6 +8,8 @@ use App\Http\Controllers\Controller;
 use DB;
 use Log;
 use Auth;
+use Redirect;
+
 
 class EncuestasController extends Controller
 {
@@ -19,6 +21,11 @@ class EncuestasController extends Controller
 	
 	public function index()
 	{
+
+		if(Auth::user()->isAdmin){
+			return Redirect::to('admin');
+		}
+
 		$sqlEncuestas ="SELECT srv.sid,srvLang.surveyls_title ".
 			" FROM surveys srv ".
 			" LEFT JOIN surveys_languagesettings srvLang ON srv.sid = srvLang.surveyls_survey_id ".
