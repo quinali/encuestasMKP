@@ -55,6 +55,12 @@
                                 <label>{!! Form::label('email', 'Email') !!}</label>
                                 {!! Form::email('email') !!}      
                             </div>
+							
+							<div class="form-group">
+                                <label>{!! Form::label('isadmin', 'Administrador') !!}</label>
+                                {!! Form::checkbox('isAdmin') !!}      
+                            </div>
+							
                             <div class="form-group">
                                 <label>Password</label>
                                 {!! Form::password('password', ['class'=> 'form-control']) !!}

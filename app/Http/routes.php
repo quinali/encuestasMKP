@@ -14,7 +14,7 @@
 Route::get('/', function () { return view('auth/login'); });
 
 /*Zona de operadores*/
-Route::get('/encuestas', 'EncuestasController@index');
+Route::get('/encuestas', ['as' => 'encuestas','uses' => 'EncuestasController@index']);
 
 Route::get('llamadas/{sid}',  						['uses' => 'LlamadasController@index']);
 Route::get('rellamar/{sid}/{tid}',  				['uses' => 'LlamadasController@rellamar']);
