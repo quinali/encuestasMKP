@@ -81,7 +81,7 @@ class OperadoresController extends Controller
 
 
 		
-		return view('admin\operadores' , ['data' => $data]);	
+		return view('admin/operadores' , ['data' => $data]);	
 		
 	}
 	

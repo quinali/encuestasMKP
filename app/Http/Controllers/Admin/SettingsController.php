@@ -37,7 +37,7 @@ class SettingsController extends Controller
 		$data['surveyls_urldescription']=$surveys_languagesettings->surveyls_urldescription;
 		$data['pluggins_settings']=$plugin_settings->value;
 		
-		return view('admin\settings_edit',['data' => $data]);	
+		return view('admin/settings_edit',['data' => $data]);	
 	}
 	
 

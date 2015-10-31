@@ -1,17 +1,18 @@
 
 
-update tokens_XXXXX
-set 
-attribute_14=attribute_13,
-attribute_13=attribute_12,
-attribute_12=attribute_11,
-attribute_11=attribute_10,
-attribute_10=attribute_9,
-attribute_9=attribute_8,
-attribute_8=attribute_7,
-attribute_7=attribute_6,
-attribute_6=attribute_5,
-attribute_5=attribute_4,
-attribute_4=attribute_3,
-attribute_3=attribute_2,
-attribute_2=NULL;
+update tokens_126296 set 
+
+set attribute_16=attribute_15,attribute_15=attribute_14,attribute_14=attribute_13,attribute_13=attribute_12,attribute_12=attribute_11,attribute_11=attribute_10,attribute_10=attribute_9,attribute_9=attribute_8,attribute_8=attribute_7,attribute_7=attribute_6,attribute_6=attribute_5,attribute_5=attribute_4,attribute_4=attribute_3,attribute_3=attribute_2,attribute_2=NULL;
+set attribute_15=attribute_14,attribute_14=attribute_13,attribute_13=attribute_12,attribute_12=attribute_11,attribute_11=attribute_10,attribute_10=attribute_9,attribute_9=attribute_8,attribute_8=attribute_7,attribute_7=attribute_6,attribute_6=attribute_5,attribute_5=attribute_4,attribute_4=attribute_3,attribute_3=attribute_2,attribute_2=NULL;
+set attribute_14=attribute_13,attribute_13=attribute_12,attribute_12=attribute_11,attribute_11=attribute_10,attribute_10=attribute_9,attribute_9=attribute_8,attribute_8=attribute_7,attribute_7=attribute_6,attribute_6=attribute_5,attribute_5=attribute_4,attribute_4=attribute_3,attribute_3=attribute_2,attribute_2=NULL;
+set attribute_13,attribute_13=attribute_12,attribute_12=attribute_11,attribute_11=attribute_10,attribute_10=attribute_9,attribute_9=attribute_8,attribute_8=attribute_7,attribute_7=attribute_6,attribute_6=attribute_5,attribute_5=attribute_4,attribute_4=attribute_3,attribute_3=attribute_2,attribute_2=NULL;
+set attribute_12=attribute_11,attribute_11=attribute_10,attribute_10=attribute_9,attribute_9=attribute_8,attribute_8=attribute_7,attribute_7=attribute_6,attribute_6=attribute_5,attribute_5=attribute_4,attribute_4=attribute_3,attribute_3=attribute_2,attribute_2=NULL;
+set attribute_11=attribute_10,attribute_10=attribute_9,attribute_9=attribute_8,attribute_8=attribute_7,attribute_7=attribute_6,attribute_6=attribute_5,attribute_5=attribute_4,attribute_4=attribute_3,attribute_3=attribute_2,attribute_2=NULL;
+set attribute_10=attribute_9,attribute_9=attribute_8,attribute_8=attribute_7,attribute_7=attribute_6,attribute_6=attribute_5,attribute_5=attribute_4,attribute_4=attribute_3,attribute_3=attribute_2,attribute_2=NULL;
+set attribute_9=attribute_8,attribute_8=attribute_7,attribute_7=attribute_6,attribute_6=attribute_5,attribute_5=attribute_4,attribute_4=attribute_3,attribute_3=attribute_2,attribute_2=NULL;
+set attribute_8=attribute_7,attribute_7=attribute_6,attribute_6=attribute_5,attribute_5=attribute_4,attribute_4=attribute_3,attribute_3=attribute_2,attribute_2=NULL;
+set attribute_7=attribute_6,attribute_6=attribute_5,attribute_5=attribute_4,attribute_4=attribute_3,attribute_3=attribute_2,attribute_2=NULL;
+set attribute_6=attribute_5,attribute_5=attribute_4,attribute_4=attribute_3,attribute_3=attribute_2,attribute_2=NULL;
+set attribute_5=attribute_4,attribute_4=attribute_3,attribute_3=attribute_2,attribute_2=NULL;
+
+update tokens_174561 set  attribute_10=attribute_9,attribute_9=attribute_8,attribute_8=attribute_7,attribute_7=attribute_6,attribute_6=attribute_5,attribute_5=attribute_4,attribute_4=attribute_3,attribute_3=attribute_2,attribute_2=NULL;

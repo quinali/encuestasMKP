@@ -22,7 +22,7 @@ class UserAdminController extends Controller
 		$users = DB::table('usuarios_operadores')->orderBy('name', 'asc')->paginate(env('NUMRESULTAPERPAG', '20'));
 		$users->setPath('usuarios');
 
-        return view('admin\users', ['users' => $users]);	
+        return view('admin/users', ['users' => $users]);	
 		
 	}
 	

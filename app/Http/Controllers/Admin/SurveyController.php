@@ -96,7 +96,7 @@ class SurveyController extends Controller
 
 		$data['llamadasPorOperadores']=$llamadasPorOperadores;
 		
-		return view('admin\survey' , ['data' => $data]);	
+		return view('admin/survey' , ['data' => $data]);	
 		
 	}
 

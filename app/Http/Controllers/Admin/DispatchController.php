@@ -40,7 +40,7 @@ class DispatchController extends Controller
 		$data['nLlamadasPendientes']=$nLlamadasPendientes;
 		
 		
-		return view('admin\dispatch',['data' => $data]);	
+		return view('admin/dispatch',['data' => $data]);	
 		
 	}
 

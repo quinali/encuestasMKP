@@ -33,7 +33,7 @@ class AdminController extends Controller
 		$surveys->setPath('admin');
 
      	
-		return view('admin\console' , ['surveys' => $surveys]);	
+		return view('admin/console' , ['surveys' => $surveys]);	
 		
 	}
 	
