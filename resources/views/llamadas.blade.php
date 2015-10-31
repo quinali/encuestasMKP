@@ -106,7 +106,7 @@
 													
 												@if ($data['isConfirmacion'] === FALSE)
 													<td>{{$llamada->attribute_3}}</td>
-													<td>{{$llamada->attribute_4}}   {{$llamada->completed}}, {{$llamada->CONTACT}},{{$llamada->MOTIV}}</td>
+													<td>{{$llamada->attribute_4}}</td>
 												@else									
 													<td>{{$llamada->attribute_3}}</td>
 													<td>{{$llamada->attribute_4}} - {{$llamada->attribute_5}}</td>
