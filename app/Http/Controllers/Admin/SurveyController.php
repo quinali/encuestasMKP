@@ -60,7 +60,7 @@ class SurveyController extends Controller
 		$sqlOperadores ="	SELECT uOp.name as name, ".
 						"	(select count(1) from tokens_".$sid." tk2 where tk2.attribute_1=tok1.operador and completed='N' and usesleft=1) as ptesNuncaRealizadas, ".
 						"	(select count(1) from tokens_".$sid." tk2 where tk2.attribute_1=tok1.operador and completed='N' and usesleft<>1) as ptesRecuperadas, ".
-						"   (select count(1) from tokens_".$sid." tk2 where tk2.attribute_1=tok1.operador and completed<> 'N' ) as ejecutadas, ".
+						"   (select count(1) from tokens_".$sid." tk2 where tk2.attribute_1=tok1.operador and completed<> 'N' ) as ejecutadas ".
 						"	FROM  ".
 						"	(select distinct(attribute_1) as operador from tokens_".$sid." where attribute_1 is not null group by attribute_1) as tok1  ".
 						"	left join usuarios_operadores uOp on tok1.operador=uOp.id ".
