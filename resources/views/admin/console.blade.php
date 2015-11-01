@@ -57,10 +57,6 @@
 																<tr>
 																	<th>Encuesta</th>
 																	<th>Activa</th>
-																	<th>Pendientes</th>
-																	<th>Totales</th>
-																	<th>Operad.Asoc</th>
-																	<th>Operad.Tot</th>
 																	<th>Acceso</th>
 																</tr>
 															</thead>
@@ -71,10 +67,6 @@
 																	<tr class='alt'>
 																		<td>{{ $survey->surveyls_title }}</td>
 																		<td>{{ $survey->active }}</td>
-																		<td>--</td>
-																		<td>--</td>
-																		<td>--</td>
-																		<td>--</td>
 																		<td><a href='survey/{{$survey->sid }}'><i class='fa fa-sign-in fa-2x'></i></a></td>
 																	</tr>
 																

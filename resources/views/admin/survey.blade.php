@@ -159,18 +159,16 @@
                                                 {   x: '{{$llamadasPorOperador->name}}', 
                                                     a: {{$llamadasPorOperador->ptesNuncaRealizadas}},  
                                                     b: {{$llamadasPorOperador->ptesRecuperadas}}, 
-                                                    c: {{$llamadasPorOperador->ejecutadasRecuperables}},
-                                                    d: {{$llamadasPorOperador->ejecutadasNORecuperables}} 
-
+                                                    c: {{$llamadasPorOperador->ejecutadas}},
                                                 },
                                                 
                                         @endforeach        
                                             ],
                                       xkey: 'x',
-                                      ykeys: ['a', 'b', 'c', 'd'],
-                                      labels: ['Ptes', 'Ptes.Recuperadas','Hechas Recuperables','Hechas NO Recuperables'],
+                                      ykeys: ['a', 'b', 'c'],
+                                      labels: ['Ptes', 'Ptes.Recuperadas','Hechas'],
                                       stacked: true,
-                                      barColors: ["#337ab7","#5CB85C", "#F0AD4E","#d9534f"],
+                                      barColors: ["#337ab7","#5CB85C", "#F0AD4E"],
                                     });
 								 		</script>
 								 	</div>

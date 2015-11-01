@@ -60,28 +60,13 @@ class SurveyController extends Controller
 		$sqlOperadores ="	SELECT uOp.name as name, ".
 						"	(select count(1) from tokens_".$sid." tk2 where tk2.attribute_1=tok1.operador and completed='N' and usesleft=1) as ptesNuncaRealizadas, ".
 						"	(select count(1) from tokens_".$sid." tk2 where tk2.attribute_1=tok1.operador and completed='N' and usesleft<>1) as ptesRecuperadas, ".
-						"	( ".
-						"	  select count(1) from tokens_".$sid." where tokens_".$sid.".token in ".
-						"	(select maxTable.token ".
-						"	from ( select token,max(id) as maxid from survey_".$sid." group by token) as maxTable ".
-						"	inner join survey_".$sid." as sv on maxTable.token=sv.token and maxTable.maxId = sv.id ".
-						"	where `".$rellamadaColumn."`='A1' ".
-						"	) and tokens_".$sid.".completed<>'N' ".
-						"	  and tokens_".$sid.".attribute_1=tok1.operador	".
-						"	)as ejecutadasRecuperables, ".
-						"	( ".
-						"	  select count(1) from tokens_".$sid." where tokens_".$sid.".token in ".
-						"	(select maxTable.token ".
-						"	from ( select token,max(id) as maxid from survey_".$sid." group by token) as maxTable ".
-						"	inner join survey_".$sid." as sv on maxTable.token=sv.token and maxTable.maxId = sv.id ".
-						"	where `".$rellamadaColumn."`='A2' ".
-						"	) and tokens_".$sid.".completed<>'N' ".
-						"	  and tokens_".$sid.".attribute_1=tok1.operador	".
-						"	)as ejecutadasNORecuperables ".
+						"   (select count(1) from tokens_".$sid." tk2 where tk2.attribute_1=tok1.operador and completed<> 'N' ) as ejecutadas, ".
 						"	FROM  ".
 						"	(select distinct(attribute_1) as operador from tokens_".$sid." where attribute_1 is not null group by attribute_1) as tok1  ".
 						"	left join usuarios_operadores uOp on tok1.operador=uOp.id ".
 						"	order by uOp.`order` ";
+
+		var_dump($sqlOperadores);		
 
 		$llamadasPorOperadores = DB::select($sqlOperadores);					
 
