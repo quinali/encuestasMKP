@@ -66,7 +66,7 @@ class SurveyController extends Controller
 						"	left join usuarios_operadores uOp on tok1.operador=uOp.id ".
 						"	order by uOp.`order` ";
 
-		var_dump($sqlOperadores);		
+		//var_dump($sqlOperadores);		
 
 		$llamadasPorOperadores = DB::select($sqlOperadores);					
 
