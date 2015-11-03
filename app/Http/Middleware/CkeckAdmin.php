@@ -26,6 +26,9 @@ class CkeckAdmin
         
 
         if(!$user->isAdmin){
+
+            //Si no es admin, por lo menos que sea el usuario administrando su perfil
+
             return response('Unauthorized.', 401);
         }
 

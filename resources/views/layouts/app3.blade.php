@@ -69,7 +69,6 @@
             <ul class="nav navbar-right top-nav">
            			@if (Auth::guest())
 					    <li><a href="{{route('auth/login')}}">Login</a></li>
-						<li><a href="{{route('auth/register')}}">Register</a></li>
 				    @else
 
 		                <li class="dropdown">

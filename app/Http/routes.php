@@ -25,7 +25,7 @@ Route::get('rellamar/{sid}/{tid}',  				['uses' => 'LlamadasController@rellamar'
 Route::get('admin/',  								['as' => 'admin','uses' => 'Admin\AdminController@index']);
 Route::get('admin/usuarios',						['uses' => 'Admin\UserAdminController@index']);
 
-Route::get ('admin/user/edit/{id}', 				['as' => 'user.edit',	'uses' => 'Admin\UserController@index']);
+Route::get ('admin/user/edit/{id}', 				['as' => 'user.edit.get',	'uses' => 'Admin\UserController@index']);
 Route::post('admin/user/edit',						['as' => 'user.edit',	'uses' => 'Admin\UserController@update']);
 
 

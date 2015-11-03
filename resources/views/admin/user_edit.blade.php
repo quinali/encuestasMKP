@@ -49,8 +49,6 @@
     						
     						{!! Form::hidden ('id') !!}
     						
-    						   
-    						
                             <div class="form-group">
                                 <label>{!! Form::label('email', 'Email') !!}</label>
                                 {!! Form::email('email') !!}      
@@ -74,8 +72,6 @@
                             <div>
                                {!! Form::submit('Guardar',['class' => 'btn btn-default']) !!} <a class="btn btn-default" href="../../../admin/usuarios">Cancelar</a>
                             </div>
-    						
-    						
     						
                         {!! Form::close() !!}
                     </div>

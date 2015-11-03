@@ -69,8 +69,7 @@
             <ul class="nav navbar-right top-nav">
            			@if (Auth::guest())
 					    <li><a href="{{route('auth/login')}}">Login</a></li>
-						<li><a href="{{route('auth/register')}}">Register</a></li>
-				    @else
+					@else
 
 		                <li class="dropdown">
 		                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> {{ Auth::user()->name }} <b class="caret"></b></a>
