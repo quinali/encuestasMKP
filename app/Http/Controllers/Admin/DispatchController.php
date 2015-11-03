@@ -73,15 +73,14 @@ class DispatchController extends Controller
 		//Recupero las llamadasd pendientes
 		$llamadasPendientes =  DB::table('tokens_'.$sid)
 								->where('completed','N')
-								->whereBetween('tid',[$desde,$hasta])
+								->skip($desde)
+								->take($hasta-$desde)
 								->orderBy('tid', 'asc')
 								->get();
-		
-		$nLlamadasPendientes =  DB::table('tokens_'.$sid)
-								->where('completed','N')
-								->whereBetween('tid',[$desde,$hasta])
-								->count();
-
+	
+		DB::connection()->enableQueryLog();	
+		$nLlamadasPendientes =  count($llamadasPendientes);
+							
 		$nOperadores =  DB::table('survey_operators')
 							->where('idSurvey',$sid)
 							->count();												
@@ -104,7 +103,7 @@ class DispatchController extends Controller
 				$idOperador++;
 			}
 
-			//log::debug($idToken."----->".$llamadaPendiente->tid.":".$operadores[$idOperador-1]->idOperator);
+			log::debug($idToken."----->".$llamadaPendiente->tid.":".$operadores[$idOperador-1]->idOperator);
 
 			DB::table('tokens_'.$sid)
 				->where('tid',$llamadaPendiente->tid)

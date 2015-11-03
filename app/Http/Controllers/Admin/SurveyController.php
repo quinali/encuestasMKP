@@ -21,6 +21,28 @@ class SurveyController extends Controller
 	
 	public function index($sid)
 	{
+
+
+		//Primero valida si existe la tabla de survey y la de tokens
+		$tableValidation =array("survey_".$sid,"tokens_".$sid);
+
+		$sql = 'select count(1) as existe'.
+						' from information_schema.tables'.
+						' where TABLE_NAME in ("survey_'.$sid.'","tokens_'.$sid.'")'.
+						' and table_schema =database()';
+
+		$check = DB::select($sql)[0]->existe;
+
+		
+		if($check <>'2'){
+			if($check =='0')
+				return Redirect()->route('admin')->with('status', 'La encuesta en cuestión aun no ha sido creada.');
+			else if ($check =='1')
+				return Redirect()->route('admin')->with('status', 'Lista de clientes aún no ha sido cargada.');
+
+		}
+
+
 		$surveys_languagesettings = DB::table('surveys_languagesettings')
 					->where('surveyls_survey_id',$sid)
 					->first();

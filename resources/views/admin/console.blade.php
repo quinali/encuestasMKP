@@ -66,7 +66,13 @@
 							
 																	<tr class='alt'>
 																		<td>{{ $survey->surveyls_title }}</td>
-																		<td>{{ $survey->active }}</td>
+																		<td>
+																			@if( $survey->expires == null)
+																				Y
+																			@else
+																				N	
+																			@endif			
+																		</td>
 																		<td><a href='survey/{{$survey->sid }}'><i class='fa fa-sign-in fa-2x'></i></a></td>
 																	</tr>
 																
