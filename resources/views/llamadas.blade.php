@@ -81,9 +81,9 @@
 									<table id="encuestas" class="kkk table table-bordered table-hover">
 										<thead>
 											<tr>
-													<th>Nombre {{ $data['isConfirmacion'] }}</th>
+												<th>Nombre</th>
 												
-												@if ($data['isConfirmacion'] === FALSE)
+												@if ($data['isConfirmacion'] == 0)
 													<th>Teléfono 1</th>
 													<th>Teléfono 2</th>
 												@else									
@@ -104,7 +104,7 @@
 												<tr class='alt' id="{{$llamada->tid}}">
 													<td>{{$llamada->firstname}} {{$llamada->lastname}}</td>
 													
-												@if ($data['isConfirmacion'] === FALSE)
+												@if ($data['isConfirmacion'] == 0)
 													<td>{{$llamada->attribute_3}}</td>
 													<td>{{$llamada->attribute_4}}</td>
 												@else									

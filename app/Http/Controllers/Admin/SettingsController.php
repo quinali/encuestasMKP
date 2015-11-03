@@ -35,7 +35,7 @@ class SettingsController extends Controller
 		$data['survey_title']=$surveys_languagesettings->surveyls_title;
 		$data['surveyls_url']=$surveys_languagesettings->surveyls_url;
 		$data['surveyls_urldescription']=$surveys_languagesettings->surveyls_urldescription;
-		$data['pluggins_settings']=$plugin_settings->value;
+		$data['pluggins_settings_isConfirmation']=$plugin_settings->isConfirmation;
 		
 		return view('admin/settings_edit',['data' => $data]);	
 	}
@@ -69,40 +69,32 @@ class SettingsController extends Controller
 	}
 
 
-	public function updateUrl(Request $request,$sid){
-
-			log::debug('Updating URL of '.$sid.' with '.$request->input('url'));
-
-			DB::table('surveys_languagesettings')
-				->where('surveyls_survey_id',$sid)
-				->update(['surveyls_url'=>$request->input('url')]);
-
-			return Redirect::to('survey/'.$sid.'/settings')->with('status', 'URL actualizada correctamente');
-}
-
-
-
-	public function updateUrlTitle(Request $request,$sid){
-
-			log::debug('Updating URL Title of '.$sid.' with '.$request->input('title'));
-
-			DB::table('surveys_languagesettings')
-				->where('surveyls_survey_id',$sid)
-				->update(['surveyls_urldescription'=>$request->input('title')]);
-
-			return Redirect::to('survey/'.$sid.'/settings')->with('status', 'Titulo de la URL actualizado correctamente');	
-	}
-
-
+	
 	public function updatePluginSetting(Request $request,$sid){
 
-			log::debug('Updating plugin_settings of '.$sid.' with '.$request->input('plugginSettings'));
+			$title=$request->input('title');
+			$url=$request->input('url');
+			
+			if($request->input('isConfirmation') =='value')
+				$isConfirmation=TRUE;
+			else 				
+				$isConfirmation=FALSE;
+			
+			log::debug('Updating plugin_settings of '.$sid.' with values ['.$title.', '.$url.', '.$isConfirmation.']');
+
+			DB::table('surveys_languagesettings')
+				->where('surveyls_survey_id',$sid)
+				->update(['surveyls_url'=>$url]);
+
+			DB::table('surveys_languagesettings')
+				->where('surveyls_survey_id',$sid)
+				->update(['surveyls_urldescription'=>$title]);
 
 			DB::table('plugin_settings')
 				->where('key',$sid)
-				->update(['value'=>$request->input('plugginSettings')]);
+				->update(['isConfirmation'=>$isConfirmation]);
 
-			return $this->index($sid);
+			return Redirect::to('survey/'.$sid.'/settings')->with('status', 'Parámetros actualizados correctamente');	
 	}
 
 

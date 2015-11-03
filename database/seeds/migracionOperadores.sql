@@ -36,3 +36,8 @@ update tokens_996661	tok left join usuarios_operadores usuOp on tok.attribute_1 
 
 
 	ALTER TABLE bbddmkp.survey_operators DROP COLUMN nameOperator;
+
+
+ALTER TABLE bbddmkp.plugin_settings ADD isConfirmation TINYINT NOT NULL DEFAULT 0 AFTER value;
+
+

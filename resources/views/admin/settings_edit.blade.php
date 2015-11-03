@@ -55,26 +55,23 @@
 					
 					<div class="panel-body">
 						<div class="row">
+							
+							{!! Form::open(['route' => ['url.updateSetting', $data["sid"]] , 'method' => 'post']) !!} 
                             <div class="col-lg-6" >	
 				                <div class="form-group">
-									{!! Form::open(['route' => ['url.update', $data["sid"]] , 'method' => 'post']) !!} 
-										<label>{!! Form::label('urlLanguage', 'URL language') !!}</label>
-			                        
-										<div class="row">
-											<div class="col-lg-12" >	
-												{!! Form::text('url',$data['surveyls_url'],['id'=>'url','size'=>'50']) !!}
-												{!! Form::hidden('sid',$data['sid']) !!}
+									<label>{!! Form::label('urlLanguage', 'URL language') !!}</label>
+			                		<div class="row">
+										<div class="col-lg-12" >	
+											{!! Form::text('url',$data['surveyls_url'],['id'=>'url','size'=>'50']) !!}
+											{!! Form::hidden('sid',$data['sid']) !!}
 
-												<a href="javascript:getUrl();" class="btn btn-info"><span data-toggle='tooltip' data-placement='top' title='Recalcular URL'><i class="fa fa-refresh"></i></span></a>
-												<button type="submit" class="btn btn-info"><span data-toggle='tooltip' data-placement='top' title='Guardar'><i class="fa fa-floppy-o"></i></span></button>
-											</div>
+											<a href="javascript:getUrl();" class="btn btn-info"><span data-toggle='tooltip' data-placement='top' title='Recalcular URL'><i class="fa fa-refresh"></i></span></a>
+												
 										</div>
-									{!! Form::close() !!}	
-		                        </div>
+									</div>
+							    </div>
 								
 								<div class="form-group">
-									{!! Form::open(['route' => ['url.updateTitle', $data["sid"]] , 'method' => 'post']) !!} 
-								    
 									<label>{!! Form::label('urlTitle', 'URL title') !!}</label>
 									
 									<div class="row">
@@ -83,36 +80,33 @@
 											{!! Form::hidden('sid',$data['sid']) !!}
 
 											<a href="javascript:getUrlTitle();" class="btn btn-info"><span data-toggle='tooltip' data-placement='top' title='Recalcular'><i class="fa fa-refresh"></i></span></a>
-											<button type="submit" class="btn btn-info"><span data-toggle='tooltip' data-placement='top' title='Guardar'><i class="fa fa-floppy-o"></i></span></button>
 										</div>
+									</div>
+								</div>
+
+		                        <div class="form-group">
+								    <div class="row">
+								    	<div class="col-lg-12" >	
+										<label>{!! Form::label('isConfirmacion', 'Campaña de confirmación') !!}</label>
+									
+										{!! Form::checkbox('isConfirmation','value',$data['pluggins_settings_isConfirmation']) !!}
+										{!! Form::hidden('sid',$data['sid']) !!}
+
+									</div>
+									
 									</div>
 								
 								{!! Form::close() !!}	
 		                        </div>
-								
-								<div class="form-group hidden" >
-								    {!! Form::open(['route' => ['url.updateSetting', $data["sid"]] , 'method' => 'post']) !!} 
-		                            
-									<label>{!! Form::label('plugginSettings', 'Pluggins settings') !!}</label>
-		                        
-								<div class="row">
-									{!! Form::text('plugginSettings',$data['pluggins_settings'],['id'=>'plugginSettings']) !!}
-								
-									<a href="javascript:getPluginSetting();" class="btn btn-info"><span data-toggle='tooltip' data-placement='top' title='Recalcular'><i class="fa fa-refresh"></i></span></a>
-									<button type="submit" class="btn btn-info"><span data-toggle='tooltip' data-placement='top' title='Guardar'><i class="fa fa-floppy-o"></i></span></button>
-									
-									
-								</div>
-								{!! Form::close() !!}	
-
-		                        </div>
-														
-		                    {!! Form::close() !!}
-		                </div>
-		            </div>
+		                        <button type="submit" class="btn btn-info"><span class="glyphicon glyphicon-floppy-disk"></span> Guardar</button>
+					    </div>
+					</div>
+					<!-- ./row -->
 		        </div>
 		    </div>
 		</div>
+	</div>
+	<!-- ./row -->	
 @endsection
 
 

@@ -16,14 +16,12 @@ use Validator;
 class LlamadasController extends Controller
 {
 	protected $numResultaPerPag;
-	protected $encuestasRellamada;
 	
    public function __construct()
 	{
 		
 				
 		$this->numResultaPerPag = env('NUMRESULTAPERPAG', '20');
-		$this->encuestasRellamada = explode(',', env('ENCUESTAS_RELLAMADA', ''));
 		$this->middleware('auth');
 	}
 	
@@ -31,11 +29,11 @@ class LlamadasController extends Controller
 	public function index(Request $request,$sid)
 	{
 		
-		$isConfirmacion=FALSE;
-		
-		if(in_array($sid,$this->encuestasRellamada)){
-			$isConfirmacion=TRUE;
-		}
+		$isConfirmacion=DB::Table('plugin_settings')
+						->where('key',$sid)
+						->select('isConfirmation')
+						->first();
+
 		
 		//Validamos que $sid es un numero
 		$validator = Validator::make(
@@ -91,7 +89,7 @@ class LlamadasController extends Controller
 		$data['sid']=$sid;
 		$data['surveyTitle']=$surveyTitle;
 		$data['totalPages']=$totalPages;
-		$data['isConfirmacion']=$isConfirmacion;
+		$data['isConfirmacion']=$isConfirmacion->isConfirmation;
 		$data['page']=$page;
 		$data['totalLlamadas'] = $totalLlamadas;
 		$data['llamadas'] = $llamadas;

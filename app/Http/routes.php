@@ -43,8 +43,6 @@ Route::get('survey/{sid}/settings/url', 			['uses' => 'Admin\SettingsController@
 Route::get('survey/{sid}/settings/urlTitle',		['uses' => 'Admin\SettingsController@calculateUrlTitle']);
 Route::get('survey/{sid}/settings/pluginSetting', 	['uses' => 'Admin\SettingsController@calculatePlugginSetting']);
 
-Route::post('survey/{sid}/settings/url', 			['as'=>'url.update','uses' => 'Admin\SettingsController@updateUrl']);
-Route::post('survey/{sid}/settings/urlTitle', 		['as'=>'url.updateTitle','uses' => 'Admin\SettingsController@updateUrlTitle']);
 Route::post('survey/{sid}/settings/pluginSetting', 	['as'=>'url.updateSetting','uses' => 'Admin\SettingsController@updatePluginSetting']);
 
 
