@@ -69,7 +69,7 @@ class DispatchController extends Controller
 		if($desde > $hasta)
 			return Redirect::to('survey/'.$sid.'/dispatch')->with('status', 'El limite inferior no puede ser mayor que el limite superior.');
 		
-		log::Debug("Reasignando desde la ".$desde." hasta la ".$hasta);
+		log::info("Reasignando desde la ".$desde." hasta la ".$hasta);
 		
 		$this->liberarLlamadas($sid,$desde,$hasta);
 		
@@ -92,8 +92,7 @@ class DispatchController extends Controller
 
 		$idToken = 1;
 		$idOperador=0;
-		log::debug('$idOperador='.$idOperador);
-
+		
 		log::info ("Encuesta[".$sid."]: Repartimos ".$nLlamadasPendientes." (desde la ".$desde." hasta la ".$hasta.")llamadas entre ".$nOperadores." operadores, a ".$nLlamadasPorOperador." llamadas por operador.");
 
 		//Recorremos todas las llamadas entre DESDE y HASTA
@@ -102,23 +101,14 @@ class DispatchController extends Controller
 
 		foreach ($llamadasTotales as $llamada ) {
 			
-			log::debug('$idToken='.$idToken);
-			log::debug('$llamada->tid='.$llamada->tid);
-			log::debug('$idOperador='.$idOperador);
-
 			
-
 			if($llamada->completed=='N'){
 
 				if($idToken > (($idOperador+1) * $nLlamadasPorOperador) )
 				{
-					log::debug('Cambiamos de operador');	
+					//Cambiamos de operador;	
 					$idOperador++;
 				}
-
-				log::debug('$operadores[$idOperador]->idOperator='.$operadores[$idOperador]->idOperator);
-
-				log::debug($idToken."----->".$llamada->tid.":".$operadores[$idOperador]->idOperator);
 
 				DB::table('tokens_'.$sid)
 					->where('tid',$llamada->tid)

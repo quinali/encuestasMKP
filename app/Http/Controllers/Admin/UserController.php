@@ -23,8 +23,6 @@ class UserController extends Controller
 	
 	public function index($id)
 	{
-		log::debug("Entrando en la edicion del usuario ".$id);
-		
 		$user= User::find($id);
 		
 		return view('admin/user_edit',['user' => $user]);	
@@ -39,13 +37,8 @@ class UserController extends Controller
 		$password=$input['password'];
 		$password_confirmation=$input['password_confirmation'];
 
-	
-		log::debug("Recibimos la clave ".strlen ($password));
-
 		if($password <> $password_confirmation){
-
 			return Redirect()->route('user.edit.get', [$input['id']])->with('status', 'Las contraseñas no coindiden: ');
-			
 		}
 
 		//Actualizamos todo menos password
@@ -62,8 +55,5 @@ class UserController extends Controller
         		->update(['password' => bcrypt($password) ]);
 
 		return Redirect::to('admin/usuarios')->with('status', 'Usuario actualizado');
-		
-        
-		
 	}
 }

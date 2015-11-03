@@ -92,8 +92,6 @@ class SettingsController extends Controller
 				$isConfirmation=TRUE;
 			else 				
 				$isConfirmation=FALSE;
-			
-			log::debug('Updating plugin_settings of '.$sid.' with values ['.$title.', '.$url.', '.$isConfirmation.']');
 
 			DB::table('surveys_languagesettings')
 				->where('surveyls_survey_id',$sid)

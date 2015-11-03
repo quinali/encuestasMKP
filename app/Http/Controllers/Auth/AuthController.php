@@ -48,8 +48,6 @@ class AuthController extends Controller
      */
     public function validator(array $data)
     {
-		Log::debug("Auth::validator()");
-		
         return Validator::make($data, [
            'name' => 'required|max:255|unique:usuarios_operadores',
            'email' => 'required|email|max:255',

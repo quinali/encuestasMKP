@@ -21,8 +21,6 @@ class OperadoresController extends Controller
 	
 	public function index($sid)
 	{
-		log::debug("Entrando en zona de administracion de operadores de la encuesta ".$sid);
-		
 		$surveys_languagesettings = DB::table('surveys_languagesettings')
 					->where('surveyls_survey_id',$sid)
 					->first();
@@ -37,12 +35,9 @@ class OperadoresController extends Controller
 					->orderBy('order','asc')
 					->get();			
 
-
 		$usuarios_administradores= DB::table('usuarios_operadores')
 					->where('isAdmin',TRUE)
 					->get();			
-
-	
 
 		$arrayUsersAdmin = array();
 		foreach ($usuarios_administradores as $usuario_admin) {
@@ -78,21 +73,14 @@ class OperadoresController extends Controller
 
 		$data['OpConLlamada']=sizeof($OpConLlamada);			
 		$data['OpTotal']=$OpTotal;	
-
-
-		
+	
 		return view('admin/operadores' , ['data' => $data]);	
 		
 	}
 	
 	public function save(Request $request,$sid)
 	{
-
-		
-
 		$idOperadores=json_decode($request->input('operadoresID'));
-
-		var_dump($idOperadores);
 
 		//Borramos todos
 		DB::table('survey_operators')->where('idSurvey',$sid)->delete();

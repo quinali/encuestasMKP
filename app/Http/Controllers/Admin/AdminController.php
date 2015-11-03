@@ -21,10 +21,6 @@ class AdminController extends Controller
 	
 	public function index()
 	{
-		log::debug("Entrando en zona de administracion");
-		
-		//$sqlEncuestas ="select srv.sid,srvLang.surveyls_title from surveys srv left join surveys_languagesettings srvLang on srv.sid = srvLang.surveyls_survey_id";
-
 		$surveys = DB::table('surveys')
 					->join('surveys_languagesettings', 'surveys.sid', '=', 'surveys_languagesettings.surveyls_survey_id')
 					->orderBy('surveys_languagesettings.surveyls_title', 'asc')
@@ -32,7 +28,6 @@ class AdminController extends Controller
 
 		$surveys->setPath('admin');
 
-     	
 		return view('admin/console' , ['surveys' => $surveys]);	
 		
 	}

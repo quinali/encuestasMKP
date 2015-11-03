@@ -78,7 +78,6 @@ class LlamadasController extends Controller
 						->where('surveyls_survey_id',$sid)
 						->select('surveyls_title')
 						->first()->surveyls_title;
-
 		
 		Log::info('LlamadasController::index('.$sid.','.Auth::user()->id.',page='.$page.')');
 		$llamadas=$this->getLlamadas($sid, Auth::user()->id, $page , $this->numResultaPerPag);
@@ -117,8 +116,6 @@ class LlamadasController extends Controller
 							" where maxTable.token='".$tokenRecuperable->token."'";
 
 		$ultimaObs = DB::select($sqlUltimaObs)[0]->observaciones;			
-
-		log::debug("Vamos a recuperar el token ".$tid." y le vamos a poner la obs:".$ultimaObs);
 		
 		//Actualizo el token recibido
 		DB::table( 'tokens_'.$sid)
@@ -176,8 +173,6 @@ class LlamadasController extends Controller
 					" where tok.attribute_1='".$idOperador."' order by tok.tid ".
 					" LIMIT ".$startCall.",".$this->numResultaPerPag;
 		
-		log::debug($sqlToken);			
-
 		$llamadas = DB::select($sqlToken);	
 		
 		return $llamadas;
