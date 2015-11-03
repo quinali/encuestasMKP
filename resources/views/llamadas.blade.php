@@ -93,7 +93,6 @@
 												
 													
 												<!-- Introducir aqui las columnas cuando segunda ronda-->
-													
 												<th>Recuperar</th>
 												<th>Intentos</th>
 												<th>Encuesta</th>

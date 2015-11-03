@@ -29,6 +29,19 @@ class SettingsController extends Controller
 		$plugin_settings = DB::table('plugin_settings')
 									->where('key',$sid)
 									->first();
+
+		//Validamos si ya esta encuesta ya tenia registro 							
+		if($plugin_settings == null){
+			DB::table('plugin_settings')
+				->insert([
+					['plugin_id'=>2,'model'=>'mkp_recall','model_id'=>1, 'key'=>$sid]
+					]);
+
+			$plugin_settings = DB::table('plugin_settings')
+									->where('key',$sid)
+									->first();
+		}	
+
 		$data = array();
 		
 		$data['sid']=$sid;
