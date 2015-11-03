@@ -79,10 +79,22 @@
             <div class="col-lg-9 ">
                 <div class="panel panel-default">
                     {!! Form::open(['route' => ['admin.deallocate', $data["sid"]] , 'method' => 'post']) !!} 
-                        <button type="submit" class="btn btn-info"><span class="glyphicon glyphicon-erase"></span> Borrar asignaciones</button>    
+                        <label>{!! Form::label('desde', 'Llamadas desde') !!}</label>
+                        {!! Form::number('desde',"1",['id'=>'desde','size'=>'4']) !!}
+                                        
+                        <label>{!! Form::label('hasta', 'hasta') !!}</label>
+                        {!! Form::number('hasta',$data['nLlamadasPendientes'],['id'=>'hasta','size'=>'4']) !!}
+                                       
+                         <button type="submit" class="btn btn-info"><span class="glyphicon glyphicon-erase"></span> Borrar asignaciones</button>    
                      {!! Form::close() !!}
                      
-                     {!! Form::open(['route' => ['admin.recover', $data["sid"]] , 'method' => 'post']) !!} 
+                     {!! Form::open(['route' => ['admin.recover', $data["sid"]] , 'method' => 'post']) !!}
+
+                        <label>{!! Form::label('desde', 'Llamadas desde') !!}</label>
+                        {!! Form::number('desde',"1",['id'=>'desde','size'=>'4']) !!}
+                                    
+                        <label>{!! Form::label('hasta', 'hasta') !!}</label>
+                        {!! Form::number('hasta',$data['nLlamadasPendientes'],['id'=>'hasta','size'=>'4']) !!} 
                         <button type="submit" class="btn btn-info"><span class="glyphicon glyphicon-refresh"></span> Recuperar llamadas pendientes</button>    
                      {!! Form::close() !!}
                 </div>      
