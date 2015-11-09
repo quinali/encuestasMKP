@@ -106,7 +106,11 @@
                                     </div>
                                 </div>
                                 <div class="panel-footer">
-                                    <span class="pull-left">Hechas Recuperables.</span>
+                                    @if($data['isConfirmation'] == 0)
+                                            <span class="pull-left">Hechas Recuperables.</span>
+                                        @else
+                                            <span class="pull-left">No contactados.</span>
+                                        @endif
                                     <div class="clearfix"></div>
                                 </div>
                             </div>
@@ -124,7 +128,11 @@
                                     </div>
                                 </div>
                                 <div class="panel-footer">
-                                    <span class="pull-left">Hechas NO Recuperables.</span>
+                                    @if($data['isConfirmation'] == 0)
+                                        <span class="pull-left">Hechas NO Recuperables.</span>
+                                    @else
+                                        <span class="pull-left">Contactados.</span>
+                                    @endif    
                                     <div class="clearfix"></div>
                                 </div>
                             </div>
