@@ -22,10 +22,12 @@ class SurveyController extends Controller
 	public function index($sid)
 	{
 
+		$isConfirmation = DB::table('plugin_settings')
+						-> where('key',$sid)
+						-> select ('isConfirmation')
+						-> first();
 
 		//Primero valida si existe la tabla de survey y la de tokens
-		$tableValidation =array("survey_".$sid,"tokens_".$sid);
-
 		$sql = 'select count(1) as existe'.
 						' from information_schema.tables'.
 						' where TABLE_NAME in ("survey_'.$sid.'","tokens_'.$sid.'")'.
@@ -33,15 +35,12 @@ class SurveyController extends Controller
 
 		$check = DB::select($sql)[0]->existe;
 
-		
 		if($check <>'2'){
 			if($check =='0')
 				return Redirect()->route('admin')->with('status', 'La encuesta en cuestión aun no ha sido creada.');
 			else if ($check =='1')
 				return Redirect()->route('admin')->with('status', 'Lista de clientes aún no ha sido cargada.');
-
 		}
-
 
 		$surveys_languagesettings = DB::table('surveys_languagesettings')
 					->where('surveyls_survey_id',$sid)
@@ -57,27 +56,60 @@ class SurveyController extends Controller
 					->where('usesleft','<>','1')
 					->count();
 		
-		$rellamadaColumn = $sid.'X'.SettingsController::getAnwswerGroup($sid).'X'.SettingsController::getRellamadaAnswer($sid);			
-
-		$sqlLlamadasEmitidasRecuperables="select count(1) as num from tokens_".$sid." where token in".
-						" ( ".
-  						"	select maxTable.token ".
-  						"	from ( select token,max(id) as maxid from survey_".$sid." group by token) as maxTable ".
-  						"	inner join survey_".$sid." as sv on maxTable.token=sv.token and maxTable.maxId = sv.id ".
-  						"	where `".$rellamadaColumn."`='A1' ".
-						" ) and tokens_".$sid.".completed<>'N'";
+		//Dependiendo de si es o no confirmacion hacemos una u otra consulta			
+		if($isConfirmation->isConfirmation == 0){
 			
-		$llamadasEmitidasRecuperables = DB::select($sqlLlamadasEmitidasRecuperables);						
+			//Encuestas de primera ronda			
+			$rellamadaColumn = $sid.'X'.SettingsController::getAnwswerGroup($sid).'X'.SettingsController::getRellamadaAnswer($sid);			
 
-		$sqlLlamadasEmitidasNoRecuperables="select count(1) as num from tokens_".$sid." where token in".
-						" ( ".
-  						"	select maxTable.token ".
-  						"	from ( select token,max(id) as maxid from survey_".$sid." group by token) as maxTable ".
-  						"	inner join survey_".$sid." as sv on maxTable.token=sv.token and maxTable.maxId = sv.id ".
-  						"	where `".$rellamadaColumn."`='A2' ".
-						" ) and tokens_".$sid.".completed<>'N'";
+			$sqlLlamadasEmitidasRecuperables="select count(1) as num from tokens_".$sid." where token in".
+							" ( ".
+	  						"	select maxTable.token ".
+	  						"	from ( select token,max(id) as maxid from survey_".$sid." group by token) as maxTable ".
+	  						"	inner join survey_".$sid." as sv on maxTable.token=sv.token and maxTable.maxId = sv.id ".
+	  						"	where `".$rellamadaColumn."`='A1' ".
+							" ) and tokens_".$sid.".completed<>'N'";
+				
+			$llamadasEmitidasRecuperables = DB::select($sqlLlamadasEmitidasRecuperables);						
 
-		$llamadasEmitidasNORecuperables = DB::select($sqlLlamadasEmitidasNoRecuperables);
+			$sqlLlamadasEmitidasNoRecuperables="select count(1) as num from tokens_".$sid." where token in".
+							" ( ".
+	  						"	select maxTable.token ".
+	  						"	from ( select token,max(id) as maxid from survey_".$sid." group by token) as maxTable ".
+	  						"	inner join survey_".$sid." as sv on maxTable.token=sv.token and maxTable.maxId = sv.id ".
+	  						"	where `".$rellamadaColumn."`='A2' ".
+							" ) and tokens_".$sid.".completed<>'N'";
+
+			$llamadasEmitidasNORecuperables = DB::select($sqlLlamadasEmitidasNoRecuperables);
+
+		}else{
+
+			//Encuestas de confirmacion
+			$contactColumn = $sid.'X'.SettingsController::getAnwswerGroup($sid).'X'.SettingsController::getHaConstactadoAnswer($sid);		
+
+			$sqlLlamadasEmitidasRecuperables="select count(1) as num from tokens_".$sid." where token in".
+							" ( ".
+	  						"	select maxTable.token ".
+	  						"	from ( select token,max(id) as maxid from survey_".$sid." group by token) as maxTable ".
+	  						"	inner join survey_".$sid." as sv on maxTable.token=sv.token and maxTable.maxId = sv.id ".
+	  						"	where `".$contactColumn."`='N' ".
+							" ) and tokens_".$sid.".completed<>'N'";
+				
+			$llamadasEmitidasRecuperables = DB::select($sqlLlamadasEmitidasRecuperables);						
+
+			$sqlLlamadasEmitidasNoRecuperables="select count(1) as num from tokens_".$sid." where token in".
+							" ( ".
+	  						"	select maxTable.token ".
+	  						"	from ( select token,max(id) as maxid from survey_".$sid." group by token) as maxTable ".
+	  						"	inner join survey_".$sid." as sv on maxTable.token=sv.token and maxTable.maxId = sv.id ".
+	  						"	where `".$contactColumn."`='Y' ".
+							" ) and tokens_".$sid.".completed<>'N'";
+
+			$llamadasEmitidasNORecuperables = DB::select($sqlLlamadasEmitidasNoRecuperables);
+
+		}
+
+
 
 		$sqlOperadores ="	SELECT uOp.name as name, ".
 						"	(select count(1) from tokens_".$sid." tk2 where tk2.attribute_1=tok1.operador and completed='N' and usesleft=1) as ptesNuncaRealizadas, ".
@@ -95,6 +127,8 @@ class SurveyController extends Controller
 		$data = array();
 		$data['survey_title']=$surveys_languagesettings->surveyls_title;
 		$data['sid']=$sid;
+		$data['isConfirmation']=$isConfirmation->isConfirmation;
+
 		$data['LlamPdtesNoRealizadas']=$llamadasPdtesNoRealizadas;
 		$data['LlamPdtesRecuperadas']=$llamadasPdtesRecuperadas;
 
