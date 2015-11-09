@@ -22,6 +22,21 @@ class SurveyController extends Controller
 	public function index($sid)
 	{
 
+		$plugin_settings = DB::table('plugin_settings')
+									->where('key',$sid)
+									->first();
+
+		//Validamos si ya esta encuesta ya tenia registro 							
+		if($plugin_settings == null){
+			DB::table('plugin_settings')
+				->insert([
+					['plugin_id'=>8,'model'=>'mkp_recall','model_id'=>1, 'key'=>$sid]
+					]);
+
+			$plugin_settings = DB::table('plugin_settings')
+									->where('key',$sid)
+									->first();
+		}	
 		$isConfirmation = DB::table('plugin_settings')
 						-> where('key',$sid)
 						-> select ('isConfirmation')
