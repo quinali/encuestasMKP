@@ -19,8 +19,6 @@ class LlamadasController extends Controller
 	
    public function __construct()
 	{
-		
-				
 		$this->numResultaPerPag = env('NUMRESULTAPERPAG', '20');
 		$this->middleware('auth');
 	}
@@ -34,7 +32,6 @@ class LlamadasController extends Controller
 						->select('isConfirmation')
 						->first();
 
-		
 		//Validamos que $sid es un numero
 		$validator = Validator::make(
 			array('sid' => $sid),
@@ -46,7 +43,6 @@ class LlamadasController extends Controller
 			Log::info('------------------------->Se ha producido error en la validacion ('.$sid.')');
 			return Redirect::to('encuestas')->with('status', '¡Se ha producido un error!');
 		}
-
 	
 		$totalLlamadas=$this->getLlamadasTotals($sid, Auth::user()->id );
 		$totalPages = ceil($totalLlamadas->totalAsignadas / $this->numResultaPerPag);
@@ -79,11 +75,8 @@ class LlamadasController extends Controller
 						->select('surveyls_title')
 						->first()->surveyls_title;
 		
-		Log::info('LlamadasController::index('.$sid.','.Auth::user()->id.',page='.$page.')');
 		$llamadas=$this->getLlamadas($sid, Auth::user()->id, $page , $this->numResultaPerPag);
 		
-		//var_dump($surveyTitle);
-
 		$data = array();
 		$data['sid']=$sid;
 		$data['surveyTitle']=$surveyTitle;
@@ -109,20 +102,51 @@ class LlamadasController extends Controller
 							->where('tid', $tid)
 							->first();
 
-		//Sacamos la ultima observacion
-		$sqlUltimaObs=	" select sv.`".SettingsController::getObservacionesAnswerColumn($sid)."` as observaciones ".
+		$attRecargables=LlamadasController::getAttRecargables($sid);
+		
+		$selectSQL='';
+		
+		$updatedValues=array();
+		$updatedValues['completed']='N';
+		
+		if(sizeof($attRecargables) != 0){
+
+			$firstElement=true;
+
+			foreach ($attRecargables as $key => $value) {
+
+				if(!$firstElement)
+					$selectSQL .=',';
+				else
+					$firstElement=false;
+							
+				$selectSQL .='`'.$value.'` as '.$key;
+
+			}
+
+
+			$sqlUltimosDatosRegistrados=	" select ".$selectSQL.
 							" from ( select token,max(id) as maxid from survey_".$sid." group by token) as maxTable ".
 							" inner join survey_".$sid." as sv on maxTable.token=sv.token and maxTable.maxId = sv.id ".
 							" where maxTable.token='".$tokenRecuperable->token."'";
+	
+			$rsUpdatedValues = DB::select($sqlUltimosDatosRegistrados)[0];
 
-		$ultimaObs = DB::select($sqlUltimaObs)[0]->observaciones;			
-		
+			var_dump($rsUpdatedValues);
+
+			
+			foreach ($attRecargables as $key => $value) {
+				$updatedValues[$key]=$rsUpdatedValues->$key;
+			}
+
+						
+		}					
+
+
 		//Actualizo el token recibido
 		DB::table( 'tokens_'.$sid)
             ->where('tid', $tid)
-            ->update(['completed' => 'N',
-            		  'attribute_2' => $ultimaObs]);
-		
+            ->update($updatedValues);
 	}
 
 	public function rellamar($sid,$tid){
@@ -199,6 +223,25 @@ class LlamadasController extends Controller
 		
 		return $recallFieldData;
 		
+	}
+
+	
+	public static function getAttRecargables($sid){
+
+		$attributedescriptions=json_decode(DB::table('surveys')
+        ->where('sid', $sid)  
+        ->select('attributedescriptions')
+        ->first()
+		->attributedescriptions) ;				
+
+		$attRecargables = [];
+      
+        foreach ($attributedescriptions as $key => $value) {
+        	if($value->cpdbmap != '(ninguno)' )
+				$attRecargables[$key]=$value->cpdbmap;
+        }
+
+        return $attRecargables;
 	}
 	
 }
