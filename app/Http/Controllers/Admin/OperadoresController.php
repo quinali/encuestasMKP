@@ -47,6 +47,7 @@ class OperadoresController extends Controller
 		$opPosibles = DB::table('usuarios_operadores')
 					->whereNotIn('id',$opIdAsignados)
 					->whereNotIn('id',$arrayUsersAdmin)
+					->where('isEnabled',1)
 					->orderBy('order','asc')
 					->get();
 

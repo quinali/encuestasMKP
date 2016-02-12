@@ -59,6 +59,11 @@
                                 {!! Form::checkbox('isAdmin') !!}      
                             </div>
 							
+							<div class="form-group">
+                                <label>{!! Form::label('isenabled', 'Habilitado') !!}</label>
+                                {!! Form::checkbox('isEnabled') !!}      
+                            </div>
+							
                             <div class="form-group">
                                 <label>Password</label>
                                 {!! Form::password('password', ['class'=> 'form-control']) !!}
