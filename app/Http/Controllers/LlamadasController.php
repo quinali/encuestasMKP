@@ -237,7 +237,7 @@ class LlamadasController extends Controller
 		$attRecargables = [];
       
         foreach ($attributedescriptions as $key => $value) {
-        	if($value->cpdbmap != '(ninguno)' )
+        	if($value->cpdbmap != '(ninguno)' && ($value->cpdbmap != null) )
 				$attRecargables[$key]=$value->cpdbmap;
         }
 
