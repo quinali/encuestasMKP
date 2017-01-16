@@ -26,7 +26,7 @@ class EncuestasController extends Controller
 			return Redirect::to('admin');
 		}
 
-		$sqlEncuestas ="SELECT srv.sid,srvLang.surveyls_title ".
+		$sqlEncuestas = "SELECT srv.sid,srvLang.surveyls_title ".
 			" FROM surveys srv ".
 			" LEFT JOIN surveys_languagesettings srvLang ON srv.sid = srvLang.surveyls_survey_id ".
 			" WHERE  1=1 ".

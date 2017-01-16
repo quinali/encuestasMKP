@@ -19,16 +19,29 @@ class AdminController extends Controller
 	}
 	
 	
-	public function index()
+	public function index(Request $request)
 	{
-		$surveys = DB::table('surveys')
+		//Si llega parametro de filtro se utiliza en la construccion de la consulta
+		$filterName = $request->input('filterName');
+		
+		if(isset($filterName))
+		{
+			$surveys = DB::table('surveys')
+					->join('surveys_languagesettings', 'surveys.sid', '=', 'surveys_languagesettings.surveyls_survey_id')
+					->where('surveys_languagesettings.surveyls_title','LIKE','%'.$filterName.'%')
+					->orderBy('surveys_languagesettings.surveyls_title', 'asc')
+					->paginate(env('NUMRESULTAPERPAG', '20'));
+		}else{
+			$surveys = DB::table('surveys')
 					->join('surveys_languagesettings', 'surveys.sid', '=', 'surveys_languagesettings.surveyls_survey_id')
 					->orderBy('surveys_languagesettings.surveyls_title', 'asc')
 					->paginate(env('NUMRESULTAPERPAG', '20'));
-
+		}
+					
+					
 		$surveys->setPath('admin');
-
-		return view('admin/console' , ['surveys' => $surveys]);	
+		
+		return view('admin/console' , ['surveys' => $surveys,'filterName'=>$filterName]);	
 		
 	}
 	
