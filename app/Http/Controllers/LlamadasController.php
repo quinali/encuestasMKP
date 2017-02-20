@@ -26,12 +26,21 @@ class LlamadasController extends Controller
 	
 	public function index(Request $request,$sid)
 	{
+		$page = $request->input('page');
+		$nameFilter = $request->input('nameFilter');
+		$telFilter = $request->input('telFilter');
 		
 		$isConfirmacion=DB::Table('plugin_settings')
 						->where('key',$sid)
 						->select('isConfirmation')
 						->first();
 
+		//Filtro para componer las busquedas de llamadas				
+		$callFilter =array();
+		$callFilter["nameFilter"]=$nameFilter;
+		$callFilter["telFilter"]=$telFilter;
+		$callFilter["isConfirmacion"]=$isConfirmacion;				
+		
 		//Validamos que $sid es un numero
 		$validator = Validator::make(
 			array('sid' => $sid),
@@ -40,14 +49,15 @@ class LlamadasController extends Controller
 		
 		if ($validator->fails())
 		{
-			Log::info('------------------------->Se ha producido error en la validacion ('.$sid.')');
+			Log::info('[ERROR] LlamadasController: Se ha producido error en la validacion de ('.$sid.')');
 			return Redirect::to('encuestas')->with('status', '¡Se ha producido un error!');
 		}
 	
-		$totalLlamadas=$this->getLlamadasTotals($sid, Auth::user()->id );
-		$totalPages = ceil($totalLlamadas->totalAsignadas / $this->numResultaPerPag);
+		$contadoresLlamadas=$this->getContadoresLlamadas($sid, Auth::user()->id);
 		
-		$page = $request->input('page');
+		$totalLlamadasMostradas = $this->getLlamadasTotals ($sid, Auth::user()->id, $callFilter);
+		
+		$totalPages = ceil($totalLlamadasMostradas->totalMostradas / $this->numResultaPerPag);
 		
 		if(!isset($page)){
 			if(!Session::has('page')){	
@@ -75,15 +85,32 @@ class LlamadasController extends Controller
 						->select('surveyls_title')
 						->first()->surveyls_title;
 		
-		$llamadas=$this->getLlamadas($sid, Auth::user()->id, $page , $this->numResultaPerPag);
+		//Si estamos filtrando y paginamos metemos el filtro en cada URL de la paginacion
+		$filterQuery='';
+		
+		if(isset($nameFilter) and $nameFilter !='')
+			$filterQuery.='&nameFilter='.$nameFilter;
+		
+		if(isset($telFilter) and $telFilter !='')
+			$filterQuery.='&telFilter='.$telFilter;
+		
+		
+		//Por ultimo sacamos la informacion de las llamadas, siempre que existan resultados
+		if($totalLlamadasMostradas->totalMostradas >0){
+			$llamadas=$this->getLlamadas($sid, Auth::user()->id, $page , $callFilter);
+		}else {
+			$llamadas= array();
+		}
+		
 		
 		$data = array();
 		$data['sid']=$sid;
 		$data['surveyTitle']=$surveyTitle;
 		$data['totalPages']=$totalPages;
+		$data['filterQuery']=$filterQuery;
 		$data['isConfirmacion']=$isConfirmacion->isConfirmation;
 		$data['page']=$page;
-		$data['totalLlamadas'] = $totalLlamadas;
+		$data['contadoresLlamadas'] = $contadoresLlamadas;
 		$data['llamadas'] = $llamadas;
 		
 		//print_r($totalLlamadas);
@@ -121,7 +148,6 @@ class LlamadasController extends Controller
 					$firstElement=false;
 							
 				$selectSQL .='`'.$value.'` as '.$key;
-
 			}
 
 
@@ -159,27 +185,54 @@ class LlamadasController extends Controller
 	}
 	
 	
-	public function getLlamadasTotals($sid,$idOperador)
+	public function getContadoresLlamadas($sid,$idOperador)
 	{
 		$sqlTotalCount ="SELECT ".
 						"(SELECT surveyls_title FROM surveys_languagesettings WHERE surveyls_survey_id =".$sid.") as tituloEncuesta,".
 						"(SELECT count(1) FROM `tokens_".$sid."` WHERE `attribute_1` ='".$idOperador."' and completed='N') as totalPtes,".
 						"(SELECT count(1) FROM `tokens_".$sid."` WHERE `attribute_1` ='".$idOperador."' and completed<>'N' ) as totalEmitidas,".
 						"(SELECT count(1) FROM `tokens_".$sid."` WHERE `attribute_1` ='".$idOperador."') as totalAsignadas" ;
-
+						
 		return DB::select($sqlTotalCount)[0];
-	
 	}
 	
 	
-	public function getLlamadas( $sid, $idOperador, $page)
+	public function getLlamadasTotals($sid,$idOperador, $callFilter)
+	{
+		$sqlTotalCount = "SELECT count(1) as totalMostradas FROM `tokens_".$sid."` WHERE `attribute_1` ='".$idOperador."' " ;
+		
+		//Introducimos los filtros si hace falta
+		if(isset($callFilter['nameFilter']) and $callFilter['nameFilter'] !=''){
+			$sqlNameFilter =" AND (firstname LIKE '%".$callFilter['nameFilter']."%' OR lastname LIKE '%".$callFilter['nameFilter']."%' )";
+			$sqlTotalCount.= $sqlNameFilter;
+		}
+		
+		$isConfirmacion = get_object_vars ($callFilter['isConfirmacion']);
+		
+		if(isset($callFilter['telFilter']) and $callFilter['telFilter'] !=''){
+			
+			//Dependiendo de si es de confirmacion o no, buscamos en unos campos de token u otros
+			if ($isConfirmacion = 0){
+				$sqlTelFilter = " AND (attribute_3 LIKE '".$callFilter['telFilter']."%' OR attribute_4 LIKE '".$callFilter['telFilter']."%') ";
+			}else{
+				$sqlTelFilter = " AND (attribute_4 LIKE '".$callFilter['telFilter']."%' OR attribute_5 LIKE '".$callFilter['telFilter']."%') ";
+			}
+		
+			$sqlTotalCount.= $sqlTelFilter;		
+		}	
+
+		
+		return DB::select($sqlTotalCount)[0];
+	}
+	
+	public function getLlamadas( $sid, $idOperador, $page, $callFilter)
 	{
 
+		//Log::info("getLlamadas()--->nameFilter=".print_r($callFilter, true));
+		
 		$recallField=$this->getRecallConfig($sid);
-		
 		$startCall = ($page - 1) * $this->numResultaPerPag;
-		
-		
+	
 		$sqlToken=	"SELECT ".
 					"tok.tid,tok.firstname,tok.lastname,".
 					"tok.token,tok.attribute_3,tok.attribute_4,tok.attribute_5,".
@@ -192,19 +245,42 @@ class LlamadasController extends Controller
 					"    select srvMax.token, max(srvMax.id) as maxid ".
 					"      from survey_".$sid." srvMax ".
 					"    group by srvMax.token) as maxIDTable  on tok.token=maxIDTable.token".
-					" left join survey_".$sid." srv on maxIDTable.maxid = srv.id ".
-					" left join answers anws on (anws.qid=".$recallField['anws_qid']." and srv.`".$recallField['anws_code']."` = anws.code)".
-					" where tok.attribute_1='".$idOperador."' order by tok.tid ".
-					" LIMIT ".$startCall.",".$this->numResultaPerPag;
+					" LEFT JOIN survey_".$sid." srv on maxIDTable.maxid = srv.id ".
+					" LEFT JOIN answers anws on (anws.qid=".$recallField['anws_qid']." and srv.`".$recallField['anws_code']."` = anws.code)".
+					" WHERE tok.attribute_1='".$idOperador."' ";
 		
+		if(isset($callFilter['nameFilter']) and $callFilter['nameFilter'] !=''){
+			$sqlNameFilter =" AND (tok.firstname LIKE '%".$callFilter['nameFilter']."%' OR tok.lastname LIKE '%".$callFilter['nameFilter']."%' )";
+			$sqlToken.= $sqlNameFilter;
+		}
+		
+		$isConfirmacion = get_object_vars ($callFilter['isConfirmacion']);
+		
+		if(isset($callFilter['telFilter']) and $callFilter['telFilter'] !=''){
+			
+			//Dependiendo de si es de confirmacion o no, buscamos en unos campos de token u otros
+			if ($isConfirmacion == 0){
+				$sqlTelFilter = " AND (tok.attribute_3 LIKE '".$callFilter['telFilter']."%' OR tok.attribute_4 LIKE '".$callFilter['telFilter']."%') ";
+			}else{
+				$sqlTelFilter = " AND (tok.attribute_4 LIKE '".$callFilter['telFilter']."%' OR tok.attribute_5 LIKE '".$callFilter['telFilter']."%') ";
+			}
+		
+			$sqlToken.= $sqlTelFilter;		
+		}		
+				
+		
+		//Al final incluimos la zona de ordenacion		
+		$sqlOrder=	" ORDER by tok.tid LIMIT ".$startCall.",".$this->numResultaPerPag;
+		$sqlToken.= $sqlOrder;
+		
+		Log::info('SQL: getLlamadas() ->'.$sqlToken);
+				
 		$llamadas = DB::select($sqlToken);	
 		
 		return $llamadas;
-	
 	}
-	
-	
-	
+
+
 	public function getRecallConfig($sid){
 	
 		$recallFieldData = array();
