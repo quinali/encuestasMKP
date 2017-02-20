@@ -75,6 +75,22 @@
 				
 					<!-- TABLA -->
 					<div class="panel-body">
+					<div class="row">
+						<div class="col-md-10 col-sm-9">
+							<section id="search">
+								<label for="search-input"><i class="fa fa-search" aria-hidden="true"></i><span class="sr-only">Buscar por cliente</span></label>
+								<input id="search-input" class="form-control input-lg" placeholder="Nombre de cliente..." autocomplete="off" spellcheck="false" autocorrect="off" tabindex="1" onkeyup="show_hide_icon()"
+								
+								 @if(!empty($data['nameFilter']))
+									value="{{ $data['nameFilter']}}"
+								 @endif
+								 >
+
+								<a id="search-clear" onclick="pageReload();" class="fa fa-times-circle" aria-hidden="true"><span class="sr-only">Clear search</span></a>
+								</section>
+							</div>
+						</div>
+								
 						<div class="row">
 							<div class="col-lg-12">
 								@if( $data['page'] >0)
@@ -178,4 +194,71 @@
 		</div>
 	</div>
 </div>
+<script>
+		
+		var input = document.getElementById("search-input");
+		
+		$('#search-clear').click(function(){ input.value=''; myNameSearchFunction();});
+		
+		search.addEventListener("keydown", function (e) {
+			if (e.keyCode === 13) {  //checks whether the pressed key is "Enter"
+				myNameSearchFunction(e);
+			}
+		});
+		
+		show_hide_icon();
+		
+		
+		function hideIcon(self) {
+			self.style.display = 'none';
+			}
+			
+		function showIcon(self) {
+			self.style.display = 'inline';
+			}
+		
+
+		function show_hide_icon(){
+		
+			input = document.getElementById("search-input");
+			filter = input.value.toUpperCase();
+		
+			if(filter.length >0) 
+					showIcon(document.getElementById("search-clear"));
+				else
+					hideIcon(document.getElementById("search-clear"));
+			}
+		
+		function myNameSearchFunction() {
+		
+			// Declare variables 
+			var input, filter, table, tr, td, i;
+			input = document.getElementById("search-input");
+			filter = input.value.toUpperCase();
+			
+			//Reload page with filter name and page=1
+			uri = window.location.href;
+			
+			uri=updateQueryStringParameter(uri,"page",1);
+			//alert(uri);
+		  	uri=updateQueryStringParameter(uri,"nameFilter",filter);
+			//alert(uri);
+			document.location = uri;
+			}
+			
+		function updateQueryStringParameter(_uri, key, value) {
+			
+			var uri = _uri;
+			
+			var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
+			var separator = uri.indexOf('?') !== -1 ? "&" : "?";
+			
+			if (uri.match(re)) {
+				return uri.replace(re, '$1' + key + "=" + value + '$2');
+			}
+			else {
+				return uri + separator + key + "=" + value;
+			}
+		}
+</script>	
 @endsection

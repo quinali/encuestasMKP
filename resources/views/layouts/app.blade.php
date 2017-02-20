@@ -13,11 +13,15 @@
 	
 	<!-- Custom CSS -->
 	{!! Html::style('assets/css/sb-operator.css') !!} 
-	{!! Html::style('assets/css/encuestas.css') !!}
+	<!--{!! Html::style('assets/css/encuestas.css') !!}-->
 
 	<!-- Custom Fonts -->
 	{!! Html::style('assets/font-awesome/css/font-awesome.min.css') !!}
 
+	
+	 <!-- Scripts -->
+	{!! Html::script('assets/js/jquery.js') !!}
+    {!! Html::script('assets/js/bootstrap.min.js') !!}
     
 	 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -79,8 +83,5 @@
 	@yield('content')
 	
 	</div>
-    <!-- Scripts -->
-	{!! Html::script('assets/js/jquery.js') !!}
-    {!! Html::script('assets/js/bootstrap.min.js') !!}
 </body>
 </html>

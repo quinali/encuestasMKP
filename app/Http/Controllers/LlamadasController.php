@@ -112,12 +112,12 @@ class LlamadasController extends Controller
 		$data['page']=$page;
 		$data['contadoresLlamadas'] = $contadoresLlamadas;
 		$data['llamadas'] = $llamadas;
+		$data['nameFilter'] = $nameFilter;
+		$data['telfFilter'] = $telFilter;
 		
 		//print_r($totalLlamadas);
 		
-				
-		return view('llamadas',['data' => $data]);	
-		
+		return view('llamadas',['data' => $data]);
 	}
 	
 	
@@ -278,6 +278,7 @@ class LlamadasController extends Controller
 		$llamadas = DB::select($sqlToken);	
 		
 		return $llamadas;
+		//return view('llamadasadmin/console' , ['surveys' => $surveys,'filterName'=>$filterName]);	
 	}
 
 
