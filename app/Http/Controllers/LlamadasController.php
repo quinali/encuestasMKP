@@ -113,7 +113,7 @@ class LlamadasController extends Controller
 		$data['contadoresLlamadas'] = $contadoresLlamadas;
 		$data['llamadas'] = $llamadas;
 		$data['nameFilter'] = $nameFilter;
-		$data['telfFilter'] = $telFilter;
+		$data['telFilter'] = $telFilter;
 		
 		//print_r($totalLlamadas);
 		

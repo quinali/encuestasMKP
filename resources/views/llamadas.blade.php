@@ -75,23 +75,36 @@
 				
 					<!-- TABLA -->
 					<div class="panel-body">
-					<div class="row">
+					<div class="row bottom-buffer" >
 						<div class="col-md-10 col-sm-9">
-							<section id="search">
-								<label for="search-input"><i class="fa fa-search" aria-hidden="true"></i><span class="sr-only">Buscar por cliente</span></label>
-								<input id="search-input" class="form-control input-lg" placeholder="Nombre de cliente..." autocomplete="off" spellcheck="false" autocorrect="off" tabindex="1" onkeyup="show_hide_icon()"
-								
-								 @if(!empty($data['nameFilter']))
-									value="{{ $data['nameFilter']}}"
-								 @endif
-								 >
-
-								<a id="search-clear" onclick="pageReload();" class="fa fa-times-circle" aria-hidden="true"><span class="sr-only">Clear search</span></a>
+							<div class="col-md-5 col-sm-4">
+								<section id="search">
+									<label for="search-input"><i class="fa fa-search" aria-hidden="true"></i><span class="sr-only">Buscar por cliente</span></label>
+									<input id="search-input" class="form-control input-lg" placeholder="Nombre de cliente..." autocomplete="off" spellcheck="false" autocorrect="off" tabindex="1" onkeyup="show_hide_icon()"
+									
+									 @if(!empty($data['nameFilter']))
+										value="{{ $data['nameFilter']}}"
+									 @endif
+									 >
+									<a id="search-clear" onclick="pageReload();" class="fa fa-times-circle" aria-hidden="true"><span class="sr-only">Clear search</span></a>
+								</section>
+							</div>
+							<div class="col-md-5 col-sm-4">
+								<section id="search2">
+									<label for="search2-input"><i class="fa fa-search" aria-hidden="true"></i><span class="sr-only">Buscar por cliente</span></label>
+									<input id="search2-input" type="number" class="form-control input-lg" placeholder="Teléfono del cliente..." autocomplete="off" spellcheck="false" autocorrect="off" tabindex="1" onkeyup="show_hide_icon()"
+									
+									 @if(!empty($data['telFilter']))
+										value="{{ $data['telFilter']}}"
+									 @endif
+									 >
+									<a id="search2-clear" onclick="pageReload();" class="fa fa-times-circle" aria-hidden="true"><span class="sr-only">Clear search</span></a>
 								</section>
 							</div>
 						</div>
+					</div>
 								
-						<div class="row">
+					<div class="row">
 							<div class="col-lg-12">
 								@if( $data['page'] >0)
 									<div class="table-responsive">
@@ -195,10 +208,27 @@
 	</div>
 </div>
 <script>
+
+		function pageReload1(){
+			
+			alert("Vamos a recargar 1");
+			
+			pageReload();
+		}
 		
-		var input = document.getElementById("search-input");
 		
-		$('#search-clear').click(function(){ input.value=''; myNameSearchFunction();});
+		function pageReload2(){
+			
+			alert("Vamos a recargar 1");
+			pageReload();
+		}
+		
+		
+		var input1 = document.getElementById("search-input");
+		var input2 = document.getElementById("search2-input");
+		
+		$('#search-clear').click(function(){ input1.value=''; myNameSearchFunction();});
+		$('#search2-clear').click(function(){ input2.value=''; myTelSearchFunction();});
 		
 		search.addEventListener("keydown", function (e) {
 			if (e.keyCode === 13) {  //checks whether the pressed key is "Enter"
@@ -206,17 +236,32 @@
 			}
 		});
 		
+		search2.addEventListener("keydown", function (e) {
+			if (e.keyCode === 13) {  //checks whether the pressed key is "Enter"
+				myTelSearchFunction(e);
+			}
+		});
+		
 		show_hide_icon();
+		
+		show_hide_icon_2();
 		
 		
 		function hideIcon(self) {
 			self.style.display = 'none';
 			}
+		
+		function hide2Icon(self) {
+			self.style.display = 'none';
+			}		
 			
 		function showIcon(self) {
 			self.style.display = 'inline';
 			}
 		
+		function show2Icon(self) {
+			self.style.display = 'inline';
+			}
 
 		function show_hide_icon(){
 		
@@ -228,6 +273,17 @@
 				else
 					hideIcon(document.getElementById("search-clear"));
 			}
+			
+		function show_hide_icon_2(){
+		
+			input = document.getElementById("search2-input");
+			filter = input.value.toUpperCase();
+		
+			if(filter.length >0) 
+					show2Icon(document.getElementById("search2-clear"));
+				else
+					hide2Icon(document.getElementById("search2-clear"));
+			}	
 		
 		function myNameSearchFunction() {
 		
@@ -245,6 +301,23 @@
 			//alert(uri);
 			document.location = uri;
 			}
+			
+		function myTelSearchFunction() {
+		
+			// Declare variables 
+			var input, filter, table, tr, td, i;
+			input = document.getElementById("search2-input");
+			filter = input.value.toUpperCase();
+			
+			//Reload page with filter name and page=1
+			uri = window.location.href;
+			
+			uri=updateQueryStringParameter(uri,"page",1);
+			//alert(uri);
+		  	uri=updateQueryStringParameter(uri,"telFilter",filter);
+			//alert(uri);
+			document.location = uri;
+			}	
 			
 		function updateQueryStringParameter(_uri, key, value) {
 			

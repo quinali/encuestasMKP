@@ -195,6 +195,8 @@ input[type="search"]{-webkit-appearance:textfield;box-sizing:content-box}
 input[type="search"]::-webkit-search-cancel-button,input[type="search"]::-webkit-search-decoration{-webkit-appearance:none}
 
 
+.bottom-buffer { margin-bottom:20px; }
+
 #search{position:relative;font-size:18px;padding-top:40px;margin:-20px auto 0}
 #search label{position:absolute;left:17px;top:51px}
 #search #search-input,#search .hint{padding-left:43px;padding-right:43px;border-radius:23px}
@@ -202,3 +204,11 @@ input[type="search"]::-webkit-search-cancel-button,input[type="search"]::-webkit
 #search #search-clear{text-decoration:none;position:absolute;right:18px;top:54px;color:#b3b3b3}
 #search #search-clear:hover{color:#8f8f8f}
 #search-results em{font-style:normal;text-decoration:underline}
+
+#search2{position:relative;font-size:18px;padding-top:40px;margin:-20px auto 0}
+#search2 label{position:absolute;left:17px;top:51px}
+#search2 #search2-input,#search2 .hint{padding-left:43px;padding-right:43px;border-radius:23px}
+#search2 .hint{color:#aaa}
+#search2 #search2-clear{text-decoration:none;position:absolute;right:18px;top:54px;color:#b3b3b3}
+#search2 #search2-clear:hover{color:#8f8f8f}
+#search2-results em{font-style:normal;text-decoration:underline}
