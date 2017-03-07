@@ -212,12 +212,15 @@ class LlamadasController extends Controller
 		if(isset($callFilter['telFilter']) and $callFilter['telFilter'] !=''){
 			
 			//Dependiendo de si es de confirmacion o no, buscamos en unos campos de token u otros
-			if ($isConfirmacion = 0){
-				$sqlTelFilter = " AND (attribute_3 LIKE '".$callFilter['telFilter']."%' OR attribute_4 LIKE '".$callFilter['telFilter']."%') ";
-			}else{
-				$sqlTelFilter = " AND (attribute_4 LIKE '".$callFilter['telFilter']."%' OR attribute_5 LIKE '".$callFilter['telFilter']."%') ";
-			}
+			//if ($isConfirmacion = 0){
+			//	$sqlTelFilter = " AND (attribute_3 LIKE '".$callFilter['telFilter']."%' OR attribute_4 LIKE '".$callFilter['telFilter']."%') ";
+			//}else{
+			//	$sqlTelFilter = " AND (attribute_4 LIKE '".$callFilter['telFilter']."%' OR attribute_5 LIKE '".$callFilter['telFilter']."%') ";
+			//}
 		
+			//Como no se marcan todas las encuestas de confirmacion, buscamos tel en att3,att4 y att5
+			$sqlTelFilter = " AND (attribute_3 LIKE '".$callFilter['telFilter']."%' OR attribute_4 LIKE '".$callFilter['telFilter']."%' OR attribute_5 LIKE '".$callFilter['telFilter']."%') ";
+
 			$sqlTotalCount.= $sqlTelFilter;		
 		}	
 
@@ -259,11 +262,14 @@ class LlamadasController extends Controller
 		if(isset($callFilter['telFilter']) and $callFilter['telFilter'] !=''){
 			
 			//Dependiendo de si es de confirmacion o no, buscamos en unos campos de token u otros
-			if ($isConfirmacion == 0){
-				$sqlTelFilter = " AND (tok.attribute_3 LIKE '".$callFilter['telFilter']."%' OR tok.attribute_4 LIKE '".$callFilter['telFilter']."%') ";
-			}else{
-				$sqlTelFilter = " AND (tok.attribute_4 LIKE '".$callFilter['telFilter']."%' OR tok.attribute_5 LIKE '".$callFilter['telFilter']."%') ";
-			}
+			//if ($isConfirmacion == 0){
+			//	$sqlTelFilter = " AND (tok.attribute_3 LIKE '".$callFilter['telFilter']."%' OR tok.attribute_4 LIKE '".$callFilter['telFilter']."%') ";
+			//}else{
+			//	$sqlTelFilter = " AND (tok.attribute_4 LIKE '".$callFilter['telFilter']."%' OR tok.attribute_5 LIKE '".$callFilter['telFilter']."%') ";
+			//}
+
+			//Como no se marcan todas las encuestas de confirmacion, buscamos tel en att3,att4 y att5
+			$sqlTelFilter = " AND (attribute_3 LIKE '".$callFilter['telFilter']."%' OR attribute_4 LIKE '".$callFilter['telFilter']."%' OR attribute_5 LIKE '".$callFilter['telFilter']."%') ";
 		
 			$sqlToken.= $sqlTelFilter;		
 		}		
