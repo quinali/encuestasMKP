@@ -175,15 +175,41 @@ class LlamadasController extends Controller
             ->update($updatedValues);
 	}
 
-	public function rellamar($sid,$tid){
+	public function rellamar(Request $request,$sid,$tid){
 
 		$this->recover($sid,$tid);
-
-		//Redirijo a llamadas
-		return Redirect::to('llamadas/'.$sid.'#'.$tid)->with('status', '¡Llamada recuperada con éxito!');
-
-	}
+		
+		//Si se hace rellamada en pagina filtrada, compongo los parametros
+		$page = $request->input('page');
+		$nameFilter = $request->input('nameFilter');
+		$telFilter = $request->input('telFilter');
+		
+		$queryParam = '?';
+		$querySet = false;
+		
+		
+		if(isset($page)){
+			$queryParam.='page='.$page;
+			$querySet = true;
+		}
+		if(isset($nameFilter)){
+			$queryParam.='&nameFilter='.$nameFilter;
+			$querySet = true;
+		}
+		if(isset($telFilter)){
+			$queryParam.='&telFilter='.$telFilter;
+			$querySet = true;
+		}
+		
+		//Si no querySet borro el contenido
+		if(!$querySet){
+			$queryParam="";
+		}
 	
+		//Redirijo a llamadas
+		//return Redirect::to('llamadas/'.$sid.'#'.$tid)->with('status', '¡Llamada recuperada con éxito!');
+		return Redirect::to('llamadas/'.$sid.$queryParam.'#'.$tid)->with('status', '¡Llamada recuperada con éxito!');
+	}	
 	
 	public function getContadoresLlamadas($sid,$idOperador)
 	{
