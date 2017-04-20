@@ -29,6 +29,7 @@ class LlamadasController extends Controller
 		$page = $request->input('page');
 		$nameFilter = $request->input('nameFilter');
 		$telFilter = $request->input('telFilter');
+		$recuperarLlamadas = $request->input('recuperar');
 		
 		$isConfirmacion=DB::Table('plugin_settings')
 						->where('key',$sid)
@@ -39,7 +40,10 @@ class LlamadasController extends Controller
 		$callFilter =array();
 		$callFilter["nameFilter"]=$nameFilter;
 		$callFilter["telFilter"]=$telFilter;
-		$callFilter["isConfirmacion"]=$isConfirmacion;				
+		$callFilter["isConfirmacion"]=$isConfirmacion;
+		//$callFilter["recuperarLlamadas"]=$recuperarLlamadas;
+		$callFilter["recuperarLlamadas"]=1;
+		
 		
 		//Validamos que $sid es un numero
 		$validator = Validator::make(
@@ -229,7 +233,8 @@ class LlamadasController extends Controller
 		
 		//Introducimos los filtros si hace falta
 		if(isset($callFilter['nameFilter']) and $callFilter['nameFilter'] !=''){
-			$sqlNameFilter =" AND (firstname LIKE '%".$callFilter['nameFilter']."%' OR lastname LIKE '%".$callFilter['nameFilter']."%' )";
+			//$sqlNameFilter =" AND (firstname LIKE '%".$callFilter['nameFilter']."%' OR lastname LIKE '%".$callFilter['nameFilter']."%' )";
+			$sqlNameFilter =" AND CONCAT(firstname,' ',lastname) LIKE '%".$callFilter['nameFilter']."%'";
 			$sqlTotalCount.= $sqlNameFilter;
 		}
 		
@@ -279,8 +284,16 @@ class LlamadasController extends Controller
 					" WHERE tok.attribute_1='".$idOperador."' ";
 		
 		if(isset($callFilter['nameFilter']) and $callFilter['nameFilter'] !=''){
-			$sqlNameFilter =" AND (tok.firstname LIKE '%".$callFilter['nameFilter']."%' OR tok.lastname LIKE '%".$callFilter['nameFilter']."%' )";
+			//$sqlNameFilter =" AND (tok.firstname LIKE '%".$callFilter['nameFilter']."%' OR tok.lastname LIKE '%".$callFilter['nameFilter']."%' )";
+			$sqlNameFilter =" AND CONCAT(tok.firstname,' ',tok.lastname) LIKE '%".$callFilter['nameFilter']."%'";
 			$sqlToken.= $sqlNameFilter;
+		}
+		
+		
+		//Si solo visualizamos las recuperables, lo metemos en el filtro
+		//$llamada->CONTACT === 'N' and $llamada->MOTIV === 'A1') OR ($llamada->CONTACT === 'A2' and $llamada->MOTIV ==='A1'
+		if(isset($callFilter['recuperarLlamadas']) and $callFilter['recuperarLlamadas']==1){
+			$sqlToken.=" AND (srv.`".$recallField['contact']."`='A2' AND  srv.`".$recallField['motiv']."`='A1' ) ";
 		}
 		
 		$isConfirmacion = get_object_vars ($callFilter['isConfirmacion']);
