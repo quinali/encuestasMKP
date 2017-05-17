@@ -1,0 +1,7 @@
+git checkout https://github.com/quinali/encuestasMKP.git
+instalar composer
+
+en el directorio de encuestasMKP:
+composer install
+
+crear fichero .env
