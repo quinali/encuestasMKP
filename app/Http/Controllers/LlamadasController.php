@@ -29,7 +29,7 @@ class LlamadasController extends Controller
 		$page = $request->input('page');
 		$nameFilter = $request->input('nameFilter');
 		$telFilter = $request->input('telFilter');
-		$recuperarLlamadas = $request->input('recuperar');
+		//$recuperarLlamadas = $request->input('recuperarFilter');
 		
 		$isConfirmacion=DB::Table('plugin_settings')
 						->where('key',$sid)
@@ -42,7 +42,7 @@ class LlamadasController extends Controller
 		$callFilter["telFilter"]=$telFilter;
 		$callFilter["isConfirmacion"]=$isConfirmacion;
 		//$callFilter["recuperarLlamadas"]=$recuperarLlamadas;
-		$callFilter["recuperarLlamadas"]=1;
+		//$callFilter["recuperarLlamadas"]=1;
 		
 		
 		//Validamos que $sid es un numero
@@ -292,9 +292,9 @@ class LlamadasController extends Controller
 		
 		//Si solo visualizamos las recuperables, lo metemos en el filtro
 		//$llamada->CONTACT === 'N' and $llamada->MOTIV === 'A1') OR ($llamada->CONTACT === 'A2' and $llamada->MOTIV ==='A1'
-		if(isset($callFilter['recuperarLlamadas']) and $callFilter['recuperarLlamadas']==1){
-			$sqlToken.=" AND (srv.`".$recallField['contact']."`='A2' AND  srv.`".$recallField['motiv']."`='A1' ) ";
-		}
+		//if(isset($callFilter['recuperarLlamadas']) and $callFilter['recuperarLlamadas']==1){
+		//	$sqlToken.=" AND (srv.`".$recallField['contact']."`='A2' AND  srv.`".$recallField['motiv']."`='A1' ) ";
+		//}
 		
 		$isConfirmacion = get_object_vars ($callFilter['isConfirmacion']);
 		
