@@ -234,7 +234,8 @@ class LlamadasController extends Controller
 		//Introducimos los filtros si hace falta
 		if(isset($callFilter['nameFilter']) and $callFilter['nameFilter'] !=''){
 			//$sqlNameFilter =" AND (firstname LIKE '%".$callFilter['nameFilter']."%' OR lastname LIKE '%".$callFilter['nameFilter']."%' )";
-			$sqlNameFilter =" AND CONCAT(firstname,' ',lastname) LIKE '%".$callFilter['nameFilter']."%'";
+			//$sqlNameFilter =" AND CONCAT(firstname,' ',lastname) LIKE '%".$callFilter['nameFilter']."%'";
+			$sqlNameFilter =" AND CONCAT(IFNULL(firstname,'|'),'|',IFNULL(lastname, '|')) LIKE '%".$callFilter['nameFilter']."%'";
 			$sqlTotalCount.= $sqlNameFilter;
 		}
 		
