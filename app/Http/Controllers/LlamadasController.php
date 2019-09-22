@@ -286,7 +286,8 @@ class LlamadasController extends Controller
 		
 		if(isset($callFilter['nameFilter']) and $callFilter['nameFilter'] !=''){
 			//$sqlNameFilter =" AND (tok.firstname LIKE '%".$callFilter['nameFilter']."%' OR tok.lastname LIKE '%".$callFilter['nameFilter']."%' )";
-			$sqlNameFilter =" AND CONCAT(tok.firstname,' ',tok.lastname) LIKE '%".$callFilter['nameFilter']."%'";
+			//$sqlNameFilter =" AND CONCAT(tok.firstname,' ',tok.lastname) LIKE '%".$callFilter['nameFilter']."%'";
+			$sqlNameFilter =" AND CONCAT(IFNULL(firstname,'|'),'|',IFNULL(lastname, '|')) LIKE '%".$callFilter['nameFilter']."%'";
 			$sqlToken.= $sqlNameFilter;
 		}
 		
